@@ -1,0 +1,428 @@
+input {
+    height: auto !important;
+}
+
+.images-selector input {
+    position: absolute;
+    z-index: 10;
+}
+
+.images-selector input:checked + .img-card {
+    filter: none;
+    transform: scaleY(1);
+}
+
+.images-selector input:checked + .images-selector {
+    border: 1px solid #272e48 !important;
+}
+
+.img-card {
+    cursor: pointer;
+    height: 75px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    margin: 0 auto;
+    display: block;
+    width: 60%;
+    filter: grayscale(1) opacity(.5);
+    transition: all 300ms ease-in;
+}
+
+.images-selector {
+    border: 1px solid #ccc;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.images-selector:hover {
+    filter: grayscale(0) opacity(1);
+    border: 1px solid #272e48 !important;
+}
+
+.images-selector::before,
+.images-selector::after {
+    transform: scaleY(-1);
+}
+
+/*fade reflection*/
+.images-selector:hover::before {
+    content: '';
+    width: inherit;
+    position: absolute;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .9), rgba(255, 255, 255, .5));
+    z-index: 1;
+}
+
+.titleCompanyName {
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 11px !important;
+    overflow: hidden;
+}
+
+.templateScroll {
+    overflow-y: scroll;
+    height: 600px;
+}
+
+.card{
+    margin-bottom: 0;
+}
+.card-body{
+    padding: 1.5rem;
+}
+
+.mainPartProcess > * {
+    padding-left: 0 !important;
+}
+
+/*fix table header in roles*/
+.tableFixHead {
+    overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+    height: 500px; /* gives an initial height of 200px to the table */
+}
+.tableFixHead thead th {
+    position: sticky; /* make the table heads sticky */
+    top: 0; /* table head will be placed from the top of the table and sticks to it */
+    z-index: 1;
+}
+.tableFixHead table {
+    border-collapse: collapse; /* make the table borders collapse to each other */
+    width: 100%;
+}
+.tableFixHead th,
+.tableFixHead td {
+    padding: 2px 2px;
+    border: 1px solid #ccc;
+    font-size: 15px !important;
+}
+.color-helper{
+    line-height: 2rem;width: 100%;padding: 1%;
+}
+.color-helper > label{
+    margin-left: 5%;
+}
+.item-accepted-hint{
+    margin-left: 1%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #7bf87b;
+    border: 1px solid #fff;
+    outline: 1px solid #7bf87b;
+}
+.item-inwait-hint{
+    margin-left: 1%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    border: 1px solid #fff;
+    outline: 1px solid yellow;
+}
+.item-reject-hint{
+    margin-left: 1%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    border: 1px solid #fff;
+    outline: 1px solid #f00;
+}
+.item-holiday-hint{
+    margin-left: 1%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 91, 92, 0.4);
+    border: 1px solid #fff;
+    outline: 1px solid rgba(255, 91, 92, 0.4);
+}
+.item-holiday-hint + span{
+    margin-left: 5%;
+}
+.item-accepted-hint + span{
+    margin-left: 5%;
+}
+.item-inwait-hint + span{
+    margin-left: 5%;
+}
+.item-reject-hint + span{
+    margin-left: 5%;
+}
+.item-holiday{
+    background-color: rgba(255, 91, 92, 0.4);
+}
+.item-accepted{
+    background-color: #00ff00;
+}
+.item-inwait{
+    background-color: yellow;
+}
+.item-reject{
+    background-color: #f00;
+}
+tr.bg-rgba-danger > td:first-child , tr.bg-white > td:first-child{
+    font-weight: bold;
+}
+tr.bg-white > td:first-child {
+    background-color: #f0f0f0cc;
+}
+/*fix table header in roles*/
+.tox-statusbar__branding > a{
+    display: none;
+}
+.add-button{
+    margin-right: 50px;
+    font-weight: bold;
+    font-size: 22px;
+}
+.add-button:hover {
+    cursor: pointer;
+    text-shadow: 0 0 5px #00f8;
+}
+.odd-row{
+    background-color: #c4e9ff33;
+}
+.even-row{
+    background-color: #f5cccc33;
+}
+.item-in-edit{
+    box-shadow:0 0 5px #ffff00f0;
+    outline:1px solid #cb797163;
+}
+.image-viewer{
+    width: 100%;
+    display: block;
+    line-height: 2.5;
+}
+.image-viewer:hover {
+    cursor: pointer;
+    text-shadow:0 0 3px #00f;
+}
+.userrequest-info-header{
+    width: 50%;
+    display:inline-block;
+    text-align: right;
+    color: blue;
+}
+.userrequest-info-data{
+    width:50%;
+    display:inline-block;
+    text-align:right;
+    color:darkred;
+}
+.user-request{
+    width:100%;
+    color:#ddd600 !important;
+}
+.user-request-reject{
+    width:100%;
+    color: #dd004d !important;
+}
+.user-request-confirm{
+    width:100%;
+    color: #0034dd !important;
+}
+a[class^="user-request"]:hover{
+    cursor:pointer;
+    text-shadow: 0 0 1px #3c3c3c;
+}
+.time-detail{
+    width:100%;
+    color:#00f !important;
+}
+.time-detail:hover{
+    cursor:pointer;
+    text-shadow: 0 0 1px #3c3c3c;
+}
+
+
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu > a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover > a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left > .dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+.open>.dropdown-menu {
+    display: block;
+}
+
+
+
+.multilevel-menu{
+    padding: 0;
+    margin: 0;
+    position: relative;
+    box-shadow: 0 0 3px #ccc;
+}
+.li-multilevel-menu{
+    display:block;
+    padding: 3px;
+    border-bottom: 1px solid #cccccc;
+}
+.li-multilevel-menu > strong{
+    font-size: 20px;
+    margin: 0 0 0 5%;
+    line-height: 0;
+    font-family: monospace;
+}
+.li-multilevel-menu > i {
+    width: 70%;
+    display: inline-block;
+    text-align: right;
+    line-height: 1rem;
+}
+.li-multilevel-menu > span {
+    padding: 0 5px;
+    margin: 0;
+    width: 100%;
+    display: block;
+    line-height: 1rem;
+
+}
+
+#mainTimeSheetTable tr td:not(:first-child):not(:last-child){
+    border-right: 1px dotted #ccc8;
+}
+
+#dropdown-menu .submenu , .submenu .submenu2 {
+    display: none;
+}
+
+#dropdown-menu li:hover .submenu , .submenu .li-multilevel-menu:hover .submenu2 {
+    display: block;
+    position: absolute;
+    z-index: 9999;
+    left: 90%;
+    top:30%;
+    width: 100%;
+    padding: 2px;
+}
+.submenu2{
+    min-width: 120px;
+}
+#dropdown-menu , submenu2 {
+    background-color: #ffffff;
+    border: 1px solid #c3c3c3;
+    transition: all 1s;
+    border-radius: 5px;
+    text-align: center;
+    width:90px;
+}
+
+#dropdown-menu .li-multilevel-menu , .submenu2 .li-multilevel-menu {
+    transition: background-color .2s ease;
+}
+
+#dropdown-menu .li-multilevel-menu:hover , .submenu .li-multilevel-menu:hover {
+    background-color: #d7ebff;
+    position: relative;
+}
+
+#dropdown-menu .submenu , .submenu .submenu2 {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    cursor: pointer;
+}
+.requestInsert,#dropdown-menu{
+    cursor: pointer;
+}
+#select_priod_prev , #select_priod_next{
+    line-height: 2.5rem;
+    font-size: 26px;
+    font-weight: bold;
+}
+#select_priod_prev:hover , #select_priod_next:hover {
+    cursor: pointer;
+    text-shadow: 0 0 2px black;
+}
+.checkbox label::before {
+    background-color: white;
+}
+.menuParentBtn{
+    position: relative;
+    padding: 5px;
+    float: right;
+}
+tr.finished{
+    display: none;
+    background-color: #fae1e1;
+    font-style: italic;
+}
+tr.finished-show{
+    display: table-row !important;
+}
+.menuParentBtn:hover{
+    background-color: #C3C3C3;
+}
+.contextMenu {
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    display: none;
+    min-width: 200px;
+    background-color: #ededed;
+    box-shadow: 0 0 1px #999;
+    transition: all linear 1s;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    z-index: 9999;
+}
+.contextMenu li {
+    display: block;
+    padding: 5px 10px;
+    text-align: right;
+    border-bottom: 1px solid #ccc;
+}
+.contextMenu li:hover {
+    background-color: #7ecfff;
+}
+

@@ -1,0 +1,7 @@
+.select2-selection.is-invalid {
+    border: 1px solid #FF5B5C !important;
+}
+
+.select2-selection.is-valid {
+    border: 1px solid #39DA8A !important;
+}
