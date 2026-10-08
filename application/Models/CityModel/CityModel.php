@@ -14,13 +14,13 @@ class CityModel extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'country_id',
-        'state_id',
-        'city_name',
-        'latitude',
-        'longitude',
-        'updated_at',
-        'deleted_at'
+        "state_id",
+        "title",
+        "latitude",
+        "longitude",
+        "user_id",
+        "created_at",
+        "updated_at"
     ];
 
 }
