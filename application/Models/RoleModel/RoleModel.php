@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Models\YearsModel;
+namespace App\Models\RoleModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YearsModel extends Model
+class RoleModel extends Model
 {
-    protected $table = 'tbl_Years';
+    protected $table = 'roles';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     use SoftDeletes;
 
     protected $fillable = [
-        "year_value",
-        "from",
-        "to",
+        "per_name",
+        "per_short_name",
+        "access_json",
+        "per_status",
+        "user_id",
         "updated_at",
         "deleted_at",
     ];
+
 }

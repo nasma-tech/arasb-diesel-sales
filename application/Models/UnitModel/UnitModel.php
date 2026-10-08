@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\UnitsModel;
+namespace App\Models\UnitModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UnitsModel extends Model
+class UnitModel extends Model
 {
-    protected $table = 'tbl_Units';
+    protected $table = 'units';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

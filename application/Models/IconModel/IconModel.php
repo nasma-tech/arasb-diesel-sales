@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\IconsModel;
+namespace App\Models\IconModel;
 use Illuminate\Database\Eloquent\Model;
 
-class IconsModel extends Model
+class IconModel extends Model
 {
-    protected $table = 'tbl_Icons';
+    protected $table = 'icons';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

@@ -3,8 +3,8 @@
 namespace App\Controllers\states;
 
 use App\Controllers\scheme\ControllerScheme;
-use App\Models\countriesModel\countriesModel;
-use App\Models\statesModel\statesModel;
+use App\Models\CountryModel\CountryModel;
+use App\Models\StateModel\StateModel;
 use Illuminate\Pagination\Paginator;
 
 Paginator::useBootstrap();
@@ -13,11 +13,11 @@ class states extends ControllerScheme
 {
     const string singleName = 'استان';
     const string pluralName = 'استان ها';
-    protected string $defaultModel = statesModel::class;
+    protected string $defaultModel = StateModel::class;
 
     public function main(): void
     {
-        $states = statesModel::query()->paginate(10);
+        $states = StateModel::query()->paginate(10);
         Paginator::useBootstrap();
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
@@ -38,7 +38,7 @@ class states extends ControllerScheme
             ['vendors/css/tables/datatable/datatables.min'],
             [
                 'states' => $states,
-                'country' => new countriesModel()
+                'country' => new CountryModel()
             ])->display('states/states.tpl');
     }
 
@@ -51,7 +51,7 @@ class states extends ControllerScheme
             'js/states/add-states'
         ], [],
             [
-                'countries' => countriesModel::all()
+                'countries' => CountryModel::all()
             ]
         )->display('states/add-states.tpl');
     }
@@ -61,11 +61,11 @@ class states extends ControllerScheme
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
-        view->setModel(statesModel::query()->find($id));
+        view->setModel(StateModel::query()->find($id));
         view->ui([
             'js/states/edit-states'
         ], '', [
-            'countries' => countriesModel::all()
+            'countries' => CountryModel::all()
         ])->display('states/edit-states.tpl');
     }
 
@@ -73,7 +73,7 @@ class states extends ControllerScheme
     {
         $countryId = $this->requestArray()['value'];
         $output = [];
-        $country = statesModel::query()->where('country_id', '=', $countryId)->get();
+        $country = StateModel::query()->where('country_id', '=', $countryId)->get();
         foreach ($country as $item) {
             $output[] = [
                 'id' => $item->id,
@@ -86,7 +86,7 @@ class states extends ControllerScheme
     public function getMapInfo(): void
     {
         $id = $this->requestArray()['id'];
-        $get = statesModel::query()->find($id);
+        $get = StateModel::query()->find($id);
         $output = [];
         $output['latitude'] = $get->latitude;
         $output['longitude'] = $get->longitude;

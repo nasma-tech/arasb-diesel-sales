@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\MenuListModel;
+namespace App\Models\MenuModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MenuListModel extends Model
+class MenuModel extends Model
 {
-    protected $table = 'tbl_Menu';
+    protected $table = 'menus';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

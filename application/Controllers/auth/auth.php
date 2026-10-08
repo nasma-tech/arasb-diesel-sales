@@ -2,9 +2,8 @@
 
 namespace App\Controllers\auth;
 
-use App\Models\rolesModel\rolesModel;
-use App\Models\UserCorporateEmailModel\UserCorporateEmailModel;
-use App\Models\usersModel\usersModel;
+use App\Models\RoleModel\RoleModel;
+use App\Models\UserModel\UserModel;
 
 class auth
 {
@@ -83,14 +82,13 @@ class auth
     {
         $userName = $_POST['user_name'];
         $userPassword = sha1(md5($_POST['user_password']));
-        $userCheck = usersModel::query()->where([
+        $userCheck = UserModel::query()->where([
             ['username', '=', $userName],
             ['password', '=', $userPassword]
         ])->first();
 
         if ($userCheck) {
-            $userMailData = UserCorporateEmailModel::query()->where('user_ids', $userCheck->id)->first();
-            $role = rolesModel::query()->find($userCheck->permission_id);
+            $role = RoleModel::query()->find($userCheck->permission_id);
 
             $this->userName = $userCheck->username;
             $this->userFullName = $userCheck->full_name;
@@ -100,7 +98,7 @@ class auth
             $this->representationId = $userCheck->representation_id;
             $this->permissionName = (($role) ? $role->per_name : 'سوپر ادمین');
             $this->userInfo = [
-                'internalNumber' => ($userMailData->internal_number ?? 0)
+                'internalNumber' => ''
             ];
             $_SESSION['userId'] = $this->userId;
             $_SESSION['userName'] = $this->userName;

@@ -2,10 +2,9 @@
 
 namespace App\Controllers\users;
 
-use App\Models\UserCorporateEmailModel\UserCorporateEmailModel;
 use App\Controllers\scheme\ControllerScheme;
-use App\Models\rolesModel\rolesModel;
-use App\Models\usersModel\usersModel;
+use App\Models\RoleModel\RoleModel;
+use App\Models\UserModel\UserModel;
 use Packages\Helpers\FileHelper;
 
 
@@ -13,7 +12,7 @@ class users extends ControllerScheme
 {
     const string singleName = 'کاربر';
     const string pluralName = 'کاربران';
-    protected string $defaultModel = usersModel::class;
+    protected string $defaultModel = UserModel::class;
 
     //user object
     public static function userObject(): object
@@ -40,7 +39,7 @@ class users extends ControllerScheme
 //            'js/appSettings/users/users'
         ],
             ['vendors/css/tables/datatable/datatables.min'], [
-                'list' => usersModel::query()
+                'list' => UserModel::query()
                     ->with([
                         'staffPermissionData'
                     ])
@@ -54,7 +53,7 @@ class users extends ControllerScheme
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
         view->ui(['js/users/add-users'], [], [
-            'userRole' => rolesModel::all(),
+            'userRole' => RoleModel::all(),
         ])->display('users/add-users.tpl');
     }
 
@@ -63,12 +62,11 @@ class users extends ControllerScheme
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
-        view->setModel(usersModel::query()->find($id));
+        view->setModel(UserModel::query()->find($id));
         view->ui([
             'js/users/edit-users'
         ], [], [
-            'userRole' => rolesModel::all(),
-            'userCorporateEmail' => UserCorporateEmailModel::query()->where(['user_ids' => $id])->first()
+            'userRole' => RoleModel::all(),
         ])->display('users/edit-users.tpl');
 
     }
@@ -79,7 +77,7 @@ class users extends ControllerScheme
         $data = $this->requestArray();
 
         if ($data['national_code']) {
-            $check = usersModel::query()->where(['national_code' => $data['national_code']])->first();
+            $check = UserModel::query()->where(['national_code' => $data['national_code']])->first();
             if ($check) {
                 $this->failedCallBack('addIndex', 'کاربر قبلا ثبت شده است');
             } else {
@@ -95,7 +93,7 @@ class users extends ControllerScheme
                     'permission_id' => $data['permission_id'],
                     'user_id' => userObject()->userId
                 ];
-                $add = usersModel::query()->create($makeData);
+                $add = UserModel::query()->create($makeData);
                 if ($add->save()) {
                     $fileHelper = new FileHelper();
                     $add->update(['image_address' => $fileHelper->fileUpload('Users', 'user_img', $add->id)]);
@@ -110,21 +108,10 @@ class users extends ControllerScheme
     public function edit($id)
     {
         $this->changeRequestValues('password', sha1(md5($this->requestArray()['password'])));
-        $this->changeRequestValues('password', sha1(md5($this->requestArray()['password'])));
 
-        if (isset($this->requestArray()['userCorporateData'])) {
-            $_POST['userCorporateData']['user_id'] = userObject()->userId;
-
-            UserCorporateEmailModel::query()->updateOrCreate(
-                ['user_ids' => $id],
-                $this->requestArray()['userCorporateData']
-            );
-
-            unset($_POST['userCorporateData']);
-        }
         if (!empty($_FILES['user_img']['name'])) {
             $image = fileHelper->fileUpload('Users', 'user_img', $id);
-            usersModel::query()->where(['id' => $id])->update(['image_address' => $image]);
+            UserModel::query()->where(['id' => $id])->update(['image_address' => $image]);
         }
         return parent::edit($id);
     }
@@ -136,7 +123,7 @@ class users extends ControllerScheme
 
     public function getUsers(): array
     {
-        $get = usersModel::query()
+        $get = UserModel::query()
             ->with([
                 'staffPermissionData'
             ])

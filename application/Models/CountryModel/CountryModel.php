@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Models\rolesModel;
+namespace App\Models\CountryModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class rolesModel extends Model
+class CountryModel extends Model
 {
-    protected $table = 'tbl_Roles';
+    protected $table = 'tbl_Countries';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     use SoftDeletes;
 
     protected $fillable = [
-        "per_name",
-        "per_short_name",
-        "access_json",
-        "per_status",
+        "country_name",
+        "country_english_name",
+        "country_area_code",
+        "abbreviated_name",
         "user_id",
         "updated_at",
         "deleted_at",

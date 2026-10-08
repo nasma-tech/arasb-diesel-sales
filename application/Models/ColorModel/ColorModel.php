@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\colorsModel;
+namespace App\Models\ColorModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class colorsModel extends Model
+class ColorModel extends Model
 {
-    protected $table = 'tbl_Colors';
+    protected $table = 'colors';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

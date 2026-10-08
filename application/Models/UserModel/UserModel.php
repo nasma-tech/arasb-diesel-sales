@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\usersModel;
+namespace App\Models\UserModel;
 
-use App\Models\rolesModel\rolesModel;
+use App\Models\RoleModel\RoleModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class usersModel extends Model
+class UserModel extends Model
 {
-    protected $table = 'tbl_Users';
+    protected $table = 'users';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -32,6 +32,6 @@ class usersModel extends Model
 
     public function staffPermissionData()
     {
-        return $this->hasOne(rolesModel::class, 'id', 'permission_id');
+        return $this->hasOne(RoleModel::class, 'id', 'permission_id');
     }
 }

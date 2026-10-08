@@ -3,15 +3,15 @@
 namespace App\Controllers\roles;
 
 use App\Controllers\scheme\ControllerScheme;
-use App\Models\MenuListModel\MenuListModel;
-use App\Models\rolesModel\rolesModel;
+use App\Models\MenuModel\MenuModel;
+use App\Models\RoleModel\RoleModel;
 
 
 class roles extends ControllerScheme
 {
     const string singleName = 'دسترسی';
     const string pluralName = 'دسترسی ها';
-    protected string $defaultModel = rolesModel::class;
+    protected string $defaultModel = RoleModel::class;
 
     public function main(): void
     {
@@ -33,7 +33,7 @@ class roles extends ControllerScheme
         ], [
             'vendors/css/tables/datatable/datatables.min'
         ], [
-            'permission' => rolesModel::all(),
+            'permission' => RoleModel::all(),
         ])->display('roles/roles.tpl');
     }
 
@@ -45,8 +45,8 @@ class roles extends ControllerScheme
         view->ui([
             'js/roles/add-roles'
         ], '', [
-            'permissions' => rolesModel::all(),
-            'menuList' => new MenuListModel()
+            'permissions' => RoleModel::all(),
+            'menuList' => new MenuModel()
         ])->display('roles/add-role.tpl');
     }
 
@@ -55,12 +55,12 @@ class roles extends ControllerScheme
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
-        view->setModel(rolesModel::query()->find($id));
+        view->setModel(RoleModel::query()->find($id));
         view->ui([
             'js/roles/edit-roles'
         ], '', [
-            'permissions' => rolesModel::all(),
-            'menuList' => new MenuListModel()
+            'permissions' => RoleModel::all(),
+            'menuList' => new MenuModel()
         ])->display('roles/edit-role.tpl');
     }
 
@@ -70,7 +70,7 @@ class roles extends ControllerScheme
             return $item;
         }, $this->requestArray()['parentMenu']);
         csrf->csrfValidate();
-        $addStaffPermissions = rolesModel::query()->create();
+        $addStaffPermissions = RoleModel::query()->create();
         $addStaffPermissions->per_name = $this->requestArray()['per_name'];
         $addStaffPermissions->per_short_name = $this->requestArray()['per_short_name'];
         $addStaffPermissions->per_status = $this->requestArray()['per_status'];
@@ -89,7 +89,7 @@ class roles extends ControllerScheme
             return $item;
         }, $this->requestArray()['parentMenu']);
         csrf->csrfValidate();
-        $editStaffPermissions = rolesModel::query()->find($id);
+        $editStaffPermissions = RoleModel::query()->find($id);
         $editStaffPermissions->per_name = $this->requestArray()['per_name'];
         $editStaffPermissions->per_short_name = $this->requestArray()['per_short_name'];
         $editStaffPermissions->per_status = $this->requestArray()['per_status'];

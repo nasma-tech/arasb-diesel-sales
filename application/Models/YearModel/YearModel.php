@@ -1,26 +1,23 @@
 <?php
 
-namespace App\Models\countriesModel;
+namespace App\Models\YearModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class countriesModel extends Model
+class YearModel extends Model
 {
-    protected $table = 'tbl_Countries';
+    protected $table = 'years';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     use SoftDeletes;
 
     protected $fillable = [
-        "country_name",
-        "country_english_name",
-        "country_area_code",
-        "abbreviated_name",
-        "user_id",
+        "year_value",
+        "from",
+        "to",
         "updated_at",
         "deleted_at",
     ];
-
 }
