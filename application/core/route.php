@@ -154,21 +154,7 @@ $router->mount('/CartableDefinition', function () use ($router) {
 });
 //baseRoute
 
-$router->get('/valad', function () {
 
-//    $mailService = new Packages\MailService\MailService();
-//
-//    $mailService->addMailToQueue(
-//        'test',
-//        'valadkhani.a@mammut-construction.com',
-//        '<h6>hi</h6>',
-//        [
-//            'amirreza.valad@gmail.com'
-//        ],
-//        storage: \Packages\Enums\MailQueueStorageType::mongodb
-//    );
-    die();
-    $t = new \Packages\Support\Number\NumberToWord();
+//human resources//
 
-    var_export($t->numberToWords(191));
-});
+//human resources//

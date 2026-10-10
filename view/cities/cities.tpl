@@ -34,7 +34,7 @@
                                             {$get = $state::query()->find($item->state_id)}
                                             {((isset($get->state_name)) ? $get->state_name : '-')}
                                         </td>
-                                        <td>{$item->city_name}</td>
+                                        <td>{$item->title}</td>
                                         <td>
                                             {$buttonHelper->actionButtons($item->id)}
                                         </td>

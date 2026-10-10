@@ -15,23 +15,21 @@ class UserModel extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'full_name',
-        'national_code',
-        'mobile',
-        'email',
-        'username',
-        'password',
-        'image_address',
-        'permission_id',
-        'user_id',
-        'updated_at',
-        'deleted_at',
+        "gender",
+        "first_name",
+        "last_name",
+        "full_name",
+        "username",
+        "password_hash",
+        "avatar",
+        "role_id",
+        "user_id",
+        "updated_at",
+        "deleted_at",
     ];
 
-    public function staffPermissionData()
+    public function roleData()
     {
-        return $this->hasOne(RoleModel::class, 'id', 'permission_id');
+        return $this->hasOne(RoleModel::class, 'id', 'role_id');
     }
 }

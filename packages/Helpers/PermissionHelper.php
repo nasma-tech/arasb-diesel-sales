@@ -63,7 +63,7 @@ class PermissionHelper
         $get = RoleModel::query()->find($permissionId);
 
         if ($get) {
-            $output = $get->per_name ?? $defaultValue;
+            $output = $get->title ?? $defaultValue;
         }
 
         return $output ?? $defaultValue;

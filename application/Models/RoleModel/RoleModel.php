@@ -14,10 +14,9 @@ class RoleModel extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        "per_name",
-        "per_short_name",
+        "title",
         "access_json",
-        "per_status",
+        "status",
         "user_id",
         "updated_at",
         "deleted_at",

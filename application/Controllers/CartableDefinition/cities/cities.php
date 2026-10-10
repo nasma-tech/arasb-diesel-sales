@@ -67,12 +67,17 @@ class cities extends ControllerScheme
 
     public function getFilterCities(): void
     {
-        $stateId = $this->requestArray()['value'];
-        $get = CityModel::query()->where('state_id', $stateId)->get()->toArray();
+        $stateId = $this->requestArray()['value'] ?? '';
+
+        if ($stateId) {
+            $get = CityModel::query()->where('state_id', $stateId)->get()->toArray();
+        } else {
+            $get = CityModel::query()->get()->toArray();
+        }
         echo json_encode(array_map(function ($item) {
             return [
                 'id' => $item['id'],
-                'title' => $item['city_name'],
+                'title' => $item['title'],
             ];
         }, $get), JSON_UNESCAPED_UNICODE);
     }

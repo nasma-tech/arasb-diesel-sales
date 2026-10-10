@@ -48,10 +48,10 @@
                                     <div class="form-group">
                                         <div class="controls">
                                             <label>نام شهر</label>
-                                            <input type="text" name="city_name" class="form-control" autofocus
+                                            <input type="text" name="title" class="form-control" autofocus
                                                    placeholder="نام شهر" required
                                                    data-validation-required-message="وارد کردن نام شهر الزامی است"
-                                                   value="{$getData->city_name}">
+                                                   value="{$getData->title}">
                                         </div>
                                     </div>
                                 </div>

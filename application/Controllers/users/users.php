@@ -3,7 +3,11 @@
 namespace App\Controllers\users;
 
 use App\Controllers\scheme\ControllerScheme;
+use App\Models\BloodTypeModel\BloodTypeModel;
+use App\Models\MaritalStatusTypeModel\MaritalStatusTypeModel;
+use App\Models\MilitaryStatusTypeModel\MilitaryStatusTypeModel;
 use App\Models\RoleModel\RoleModel;
+use App\Models\UserContactTypeModel\UserContactTypeModel;
 use App\Models\UserModel\UserModel;
 use Packages\Helpers\FileHelper;
 
@@ -39,11 +43,7 @@ class users extends ControllerScheme
 //            'js/appSettings/users/users'
         ],
             ['vendors/css/tables/datatable/datatables.min'], [
-                'list' => UserModel::query()
-                    ->with([
-                        'staffPermissionData'
-                    ])
-                    ->get()
+                'list' => UserModel::all()
             ])->display('users/users.tpl');
     }
 
@@ -53,7 +53,13 @@ class users extends ControllerScheme
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
         view->ui(['js/users/add-users'], [], [
-            'userRole' => RoleModel::all(),
+//            'userRole' => RoleModel::all(),
+            "militaryStatusTypes" => MilitaryStatusTypeModel::all(),
+            "bloodTypes" => BloodTypeModel::all(),
+            "maritalStatusTypes" => MaritalStatusTypeModel::all(),
+            "userContactTypes" => UserContactTypeModel::query()->where([
+                'is_required' => 1
+            ])->get()
         ])->display('users/add-users.tpl');
     }
 

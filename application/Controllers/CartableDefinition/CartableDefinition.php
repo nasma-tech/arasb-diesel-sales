@@ -74,8 +74,8 @@ class CartableDefinition extends ControllerScheme
         echo json_encode(array_map(function ($item) {
             return [
                 'id' => $item['id'],
-                'titlePersian' => $item['per_name'],
-                'titleEnglish' => $item['per_short_name'],
+                'titlePersian' => $item['title'],
+                'titleEnglish' => "-",
                 'users' => (function () use ($item) {
                     $permissionId = $item['id'];
                     $query = UserModel::query();
