@@ -280,7 +280,6 @@
                                                                     <thead class="thead-dark">
                                                                     <tr>
                                                                         <th class="border">#</th>
-                                                                        <th class="border">شهر</th>
                                                                         <th class="border">آدرس</th>
                                                                         <th class="border">عملیات</th>
                                                                     </tr>
