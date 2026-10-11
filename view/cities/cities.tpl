@@ -32,7 +32,7 @@
                                         <td></td>
                                         <td>
                                             {$get = $state::query()->find($item->state_id)}
-                                            {((isset($get->state_name)) ? $get->state_name : '-')}
+                                            {((isset($get->title)) ? $get->title : '-')}
                                         </td>
                                         <td>{$item->title}</td>
                                         <td>

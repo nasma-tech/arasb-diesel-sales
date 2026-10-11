@@ -14,13 +14,14 @@ class StateModel extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'country_id',
-        'state_name',
-        'state_area_code',
-        'latitude',
-        'longitude',
-        'hc_key',
-        'updated_at',
-        'deleted_at',
+        "country_id",
+        "title",
+        "area_code",
+        "latitude",
+        "longitude",
+        "hc_key",
+        "user_id",
+        "updated_at",
+        "deleted_at",
     ];
 }

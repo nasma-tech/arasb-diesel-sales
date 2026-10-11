@@ -77,7 +77,7 @@ class states extends ControllerScheme
         foreach ($country as $item) {
             $output[] = [
                 'id' => $item->id,
-                'title' => $item->state_name
+                'title' => $item->title
             ];
         }
         echo json_encode($output, JSON_UNESCAPED_UNICODE);

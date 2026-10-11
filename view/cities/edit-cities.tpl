@@ -25,7 +25,7 @@
                                             <select class="form-control select2" name="country_id" required>
                                                 <option selected disabled>لطفا یک کشور را انتخاب کنید</option>
                                                 {foreach $country as $item}
-                                                    <option value="{$item->id}" {(($item->id == 102)?'selected':'')}>{$item->country_name}</option>
+                                                    <option value="{$item->id}" {(($item->id == 102)?'selected':'')}>{$item->persian_title}</option>
                                                 {/foreach}
                                             </select>
                                         </div>
@@ -38,7 +38,7 @@
                                             <select class="form-control select2" name="state_id">
                                                 <option selected disabled>لطفا یک استان را انتخاب کنید</option>
                                                 {foreach $states as $item}
-                                                    <option value="{$item->id}" {(($getData->state_id == $item->id)?'selected':'')}>{$item->state_name}</option>
+                                                    <option value="{$item->id}" {(($getData->state_id == $item->id)?'selected':'')}>{$item->title}</option>
                                                 {/foreach}
                                             </select>
                                         </div>
