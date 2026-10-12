@@ -154,7 +154,13 @@ $router->mount('/CartableDefinition', function () use ($router) {
 });
 //baseRoute
 
+$router->mount('/IssuingPlace', function () use ($router) {
+    dynamicRoute($router, App\Controllers\IssuingPlace\IssuingPlace::class, [
+        [
+            'method' => 'GET',
+            'path' => '/filter',
+            'action' => 'filter'
+        ]
+    ]);
+});
 
-//human resources//
-
-//human resources//

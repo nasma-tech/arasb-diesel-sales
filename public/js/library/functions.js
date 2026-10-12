@@ -1918,3 +1918,9 @@ function getInputsNested(selector) {
 
     return result;
 }
+
+$.fn.destroySelect2 = function () {
+    if (this.hasClass('select2-hidden-accessible')) {
+        this.select2('destroy');
+    }
+}
