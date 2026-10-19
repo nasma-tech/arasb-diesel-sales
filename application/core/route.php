@@ -4,6 +4,7 @@ use App\Controllers\auth\auth;
 use App\Controllers\CartableDefinition\cities\cities;
 use App\Controllers\colors\colors;
 use App\Controllers\countries\countries;
+use App\Controllers\CustomerContactInformation\CustomerContactInformation;
 use App\Controllers\dashboard\dashboard;
 use App\Controllers\login\login;
 use App\Controllers\login\MenuList\MenuList;
@@ -11,6 +12,7 @@ use App\Controllers\roles\roles;
 use App\Controllers\states\states;
 use App\Controllers\Units\Units;
 use App\Controllers\users\users;
+use Packages\View\handleHttpErrorView;
 
 
 $router = new \Bramus\Router\Router();
@@ -18,7 +20,7 @@ $router = new \Bramus\Router\Router();
 
 //baseRoute
 $router->before('GET|POST', '/.*', function () {
-    $freeRoutes = ['/login', '/auth/authentication', '/webApi'];
+    $freeRoutes = ['/login', '/auth/authentication', '/checkDevice', '/webApi'];
     $uri = strtok($_SERVER['REQUEST_URI'], '?');
     $isFree = in_array($uri, $freeRoutes) || str_starts_with($uri, '/webApi');
     if (!isset($_SESSION['userId']) && !$isFree) {
@@ -31,18 +33,13 @@ $router->before('GET|POST', '/.*', function () {
         exit();
     }
 });
+
+
 $router->get('/', function () {
     header('location: /dashboard/main');
 });
 $router->set404(function () {
-    if (isAjaxRequest()) {
-        http_response_code(404);
-        echo 'notFound';
-    } else {
-        view->ui('', '', [
-            'getMsg' => view->show404Error()
-        ])->display('sections/404Page.tpl');
-    }
+    handleHttpErrorView::handle(404);
 });
 $router->get('/login', function () {
     $main = new login();
@@ -53,9 +50,7 @@ $router->get('/logout', function () {
     header('location:/login');
 });
 $router->get('/notAccess', function () {
-    view->ui('', '', [
-        'getNotAccess' => view->showNotAccessPage()
-    ])->display('sections/notAccessPage.tpl');
+    handleHttpErrorView::handle(403);
 });
 $router->get('/Profile', function () {
     view->ui()->display('view/Profile/Profile.tpl');
@@ -164,3 +159,6 @@ $router->mount('/IssuingPlace', function () use ($router) {
     ]);
 });
 
+$router->mount('/CustomerContactInformation', function () use ($router) {
+    dynamicRoute($router, CustomerContactInformation::class);
+});
