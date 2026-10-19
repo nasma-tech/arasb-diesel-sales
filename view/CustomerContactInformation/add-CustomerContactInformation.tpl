@@ -17,6 +17,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="card shadow" style="margin-top: 2px">
                     <div class="card-content">
