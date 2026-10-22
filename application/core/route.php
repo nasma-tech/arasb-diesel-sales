@@ -104,6 +104,11 @@ $router->mount('/states', function () use ($router) {
             'method' => 'GET',
             'path' => '/getMapInfo',
             'action' => 'getMapInfo'
+        ],
+        [
+            'method' => 'GET',
+            'path' => '/getStates',
+            'action' => 'getStates'
         ]
     ]);
 });
@@ -161,4 +166,64 @@ $router->mount('/IssuingPlace', function () use ($router) {
 
 $router->mount('/CustomerContactInformation', function () use ($router) {
     dynamicRoute($router, CustomerContactInformation::class);
+});
+$router->mount('/ContactsGroup', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactsGroup\ContactsGroup::class, [
+        [
+            'method' => 'GET',
+            'path' => "/getContactsGroup",
+            'action' => 'getContactsGroup'
+        ]
+    ]);
+});
+$router->mount('/ContactAcquisitionSources', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactAcquisitionSources\ContactAcquisitionSources::class, [
+        [
+            'method' => 'GET',
+            'path' => "/getContactAcquisitionSources",
+            'action' => 'getContactAcquisitionSources'
+        ]
+    ]);
+});
+$router->mount('/ContactPhoneLabel', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactPhoneLabel\ContactPhoneLabel::class, [
+        [
+            'method' => 'GET',
+            'path' => "/getContactPhoneLabel",
+            'action' => 'getContactPhoneLabel'
+        ]
+    ]);
+});
+$router->mount('/IndustryType', function () use ($router) {
+    dynamicRoute($router, App\Controllers\IndustryType\IndustryType::class);
+});
+$router->mount('/CarsGroup', function () use ($router) {
+    dynamicRoute($router, App\Controllers\CarsGroup\CarsGroup::class, [
+        [
+            'method' => 'GET',
+            'path' => "/getCarGroups",
+            'action' => 'getCarGroups'
+        ]
+    ]);
+});
+$router->mount('/CarsBrand', function () use ($router) {
+    dynamicRoute($router, App\Controllers\CarsBrand\CarsBrand::class,[
+        [
+            'method' => 'GET',
+            'path' => "/getCarBrands",
+            'action' => 'getCarBrands'
+        ]
+    ]);
+});
+$router->mount('/CarsModel', function () use ($router) {
+    dynamicRoute($router, App\Controllers\CarsModel\CarsModel::class);
+});
+$router->mount('/FollowUpActionsTitle', function () use ($router) {
+    dynamicRoute($router, App\Controllers\FollowUpActionsTitle\FollowUpActionsTitle::class);
+});
+$router->mount('/ContactPhones', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactPhones\ContactPhones::class);
+});
+$router->mount('/Companies', function () use ($router) {
+    dynamicRoute($router, App\Controllers\Companies\Companies::class);
 });
