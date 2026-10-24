@@ -62,5 +62,16 @@ class CarsModel extends ControllerScheme
         ])->display('CarsModel/edit-CarsModel.tpl');
     }
 
+    public function getCarModel()
+    {
+        $carBrandId = $this->requestArray()['carBrandId'];
+        echo json_encode(array_map(function ($item) {
+            return [
+                'id' => $item['id'],
+                'title' => $item['title']
+            ];
+        }, CarsModelModel::query()->get()->where('car_brand_id', $carBrandId)->toArray()), JSON_UNESCAPED_UNICODE);
+    }
+
 
 }
