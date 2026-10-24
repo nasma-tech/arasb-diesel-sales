@@ -1,9 +1,5 @@
 $(function () {
     let getLocation = window.location.href;
-    //view index
-    if (location.href.search('viewIndex') != '-1') {
-        $('form:not(.notDisable)').find(':input:not(.notDisable)').prop('disabled', true);
-    }
     $("#refreshBtn").attr('href', getLocation);
     $("#backBtn").on('click', function (event) {
         event.preventDefault();
@@ -11,9 +7,16 @@ $(function () {
     });
 
     // return false
-    $(".select2").select2({
-        width: "100%"
-    })
+    $('.select2').select2({
+        dir: 'rtl',
+        width: '100%',
+        placeholder: 'یک مورد را انتخاب کنید',
+        language: {
+            noResults: function () {
+                return 'موردی یافت نشد';
+            }
+        }
+    });
 
     $(document).validateFormBeforeSend({
         checkRequiredAttribute: true

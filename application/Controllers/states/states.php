@@ -93,4 +93,14 @@ class states extends ControllerScheme
         echo json_encode($output, JSON_UNESCAPED_UNICODE);
     }
 
+    public function getStates()
+    {
+        echo json_encode(array_map(function ($item){
+            return [
+                'id'=>$item['id'],
+                'title'=>$item['title'],
+            ];
+        },StateModel::query()->where('country_id',102)->get()->toArray()),JSON_UNESCAPED_UNICODE);
+    }
+
 }
