@@ -216,7 +216,22 @@ $router->mount('/CarsBrand', function () use ($router) {
     ]);
 });
 $router->mount('/CarsModel', function () use ($router) {
-    dynamicRoute($router, App\Controllers\CarsModel\CarsModel::class);
+    dynamicRoute($router, App\Controllers\CarsModel\CarsModel::class,[
+        [
+            'method' => 'GET',
+            'path' => "/getCarModel",
+            'action' => 'getCarModel'
+        ]
+    ]);
+});
+$router->mount('/CarsTip', function () use ($router) {
+    dynamicRoute($router, App\Controllers\CarsTip\CarsTip::class,[
+        [
+            'method' => 'GET',
+            'path' => "/getCarTips",
+            'action' => 'getCarTips'
+        ]
+    ]);
 });
 $router->mount('/FollowUpActionsTitle', function () use ($router) {
     dynamicRoute($router, App\Controllers\FollowUpActionsTitle\FollowUpActionsTitle::class);
@@ -226,4 +241,11 @@ $router->mount('/ContactPhones', function () use ($router) {
 });
 $router->mount('/Companies', function () use ($router) {
     dynamicRoute($router, App\Controllers\Companies\Companies::class);
+});
+
+$router->mount('/ContactProjects', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactProjects\ContactProjects::class);
+});
+$router->mount('/ContactProjectsFollowUp', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactProjectsFollowUp\ContactProjectsFollowUp::class);
 });
