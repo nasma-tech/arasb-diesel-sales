@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-12 mt-2">
                         <label for="">توضیحات</label>
-                        <textarea class="form-control" id="" name="" rows="6" style="resize: none"></textarea>
+                        <textarea class="form-control" id="followUp_description" name="followUp_description" rows="6" style="resize: none"></textarea>
                     </div>
                 </div>
             </div>
