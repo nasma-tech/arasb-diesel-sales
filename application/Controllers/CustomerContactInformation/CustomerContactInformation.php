@@ -8,11 +8,16 @@ use App\Models\CarsGroupModel\CarsGroupModel;
 use App\Models\CompaniesModel\CompaniesModel;
 use App\Models\ContactAcquisitionSourcesModel\ContactAcquisitionSourcesModel;
 use App\Models\ContactPhonesModel\ContactPhonesModel;
+use App\Models\ContactProjectRequestsModel\ContactProjectRequestsModel;
+use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
+use App\Models\ContactProjectsModel\ContactProjectsModel;
 use App\Models\ContactsGroupModel\ContactsGroupModel;
 use App\Models\CustomerContactInformationModel\CustomerContactInformationModel;
 use App\Models\FollowUpActionsTitleModel\FollowUpActionsTitleModel;
 use App\Models\IndustryTypeModel\IndustryTypeModel;
 use App\Models\StateModel\StateModel;
+use InvalidArgumentException;
+use Packages\View\handleHttpErrorView;
 
 class CustomerContactInformation extends ControllerScheme
 {
@@ -77,9 +82,16 @@ class CustomerContactInformation extends ControllerScheme
         ])->display('CustomerContactInformation/edit-CustomerContactInformation.tpl');
     }
 
+
     private function addContactInfo()
     {
         $data = $this->requestArray();
+        $this->checkRequired([
+            'first_name' => 'نام',
+            'last_name' => 'نام خانوادگی',
+            'contact_group_id' => 'گروه تماس',
+            'contact_acquisition_source_id' => 'نحوه آشنایی',
+        ], $data);
         $subscriberData = [
             'contact_type' => $data['contact_type'],
             'first_name' => $data['first_name'],
@@ -88,15 +100,22 @@ class CustomerContactInformation extends ControllerScheme
             'contact_acquisition_source_id' => $data['contact_acquisition_source_id'],
         ];
         if ($data['contact_type'] == 1) {
+            $this->checkRequired([
+                'state_id' => 'استان',
+                'city_id' => 'شهر',
+            ], $data);
             $dataForm = [
                 'national_code' => $data['national_code'],
                 'state_id' => $data['state_id'],
                 'city_id' => $data['city_id'],
                 'user_id' => userObject()->userId,
             ];
-            $mergeData = array_merge($subscriberData, $dataForm);
+            $mergeData = array_merge($dataForm, $data);
             return CustomerContactInformationModel::query()->create($mergeData)->id;
         } elseif ($data['contact_type'] == 2) {
+            $this->checkRequired([
+                'national_ID'
+            ], $data);
             $dataForm = [
                 'national_ID' => $data['national_ID'],
                 'economic_code' => $data['economic_code'],
@@ -112,35 +131,95 @@ class CustomerContactInformation extends ControllerScheme
             $addCompanies = CompaniesModel::query()->create($dataForm);
             $addContact->companies()->attach($addCompanies->id);
             return $addContact->id;
-        }else{
-            return false;
-        }
-    }
-
-    private function addContactPhones($contactId)
-    {
-        if (isset($this->requestArray()['contactPhone'])) {
-            $data = $this->requestArray()['contactPhone'];
-            foreach ($data as $item) {
-                $item['contact_id'] = $contactId;
-                $item['user_id'] = userObject()->userId;
-                ContactPhonesModel::query()->create($item);
-            }
-            return true;
         } else {
             return false;
         }
     }
 
-    private function addContactProject()
+    private function addContactPhones($contactId): void
     {
-        var_print($this->requestArray());
+        if (isset($this->requestArray()['contactPhone'])) {
+            $data = $this->requestArray()['contactPhone'];
+            foreach ($data as $item) {
+                $this->checkRequired([
+                    'contact_phone_label_id',
+                    'phone_number',
+                ], $item);
+                $item['contact_id'] = $contactId;
+                $item['user_id'] = userObject()->userId;
+                ContactPhonesModel::query()->create($item);
+            }
+        }
+    }
+
+    private function createProjectCode(int $contactId)
+    {
+        $contactProject = ContactProjectsModel::query()->where('contact_id', $contactId)->count();
+        return jdate("Y") . $contactId . (($contactProject == 0) ? 1 : $contactProject);
+    }
+
+    private function addContactProject(int $contactId)
+    {
+        $data = $this->requestArray();
+        if (isset($data['projectRequest'])) {
+            $this->checkRequired([
+                'payment_type',
+                'purchase_type',
+                'industry_type_id',
+            ], $data);
+            $makeData = [
+                'contact_id' => $contactId,
+                'project_code' => $this->createProjectCode($contactId),
+                'payment_type' => $data['payment_type'],
+                'purchase_type' => $data['purchase_type'],
+                'industry_type_id' => $data['industry_type_id'],
+                'user_id' => userObject()->userId,
+            ];
+            $addProject = ContactProjectsModel::query()->create($makeData);
+            if ($addProject) {
+                foreach ($data['projectRequest'] as $item) {
+                    ContactProjectRequestsModel::query()->create([
+                        'contact_project_id' => $addProject->id,
+                        'car_group_id' => $item['car_group_id'],
+                        'car_brand_id' => $item['car_brand_id'],
+                        'car_model_id' => $item['car_model_id'],
+                        'car_tip_id' => $item['car_tip_id'],
+                        'request_amount' => $item['request_amount'],
+                        'user_id' => userObject()->userId,
+                    ]);
+                }
+                return $addProject->id;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private function addFollowUp(int $contactProjectId): void
+    {
+        $data = $this->requestArray();
+        $this->checkRequired([
+            'FollowUp_action_id'
+        ], $data);
+        $makeData = [
+            'contact_project_id' => $contactProjectId,
+            'FollowUp_action_id' => $data['FollowUp_action_id'],
+            'next_followUp_date' => dateTimeHelper->convertDateToTimestamp($data['next_followUp_date']),
+            'followUp_description' => $data['followUp_description'],
+            'user_id' => userObject()->userId
+        ];
+        ContactProjectsFollowUpModel::query()->create($makeData);
     }
 
     public function add()
     {
-//        $addContact = $this->addContactInfo();
-//        $addPhones = $this->addContactPhones($addContact);
-        $this->addContactProject();
+        $addContact = $this->addContactInfo();
+        $this->addContactPhones($addContact);
+        $addContactProject = $this->addContactProject($addContact);
+        //add contact project
+        $this->addFollowUp($addContactProject);
+        $this->successCallBack('/CustomerContactInformation/main');
     }
 }
