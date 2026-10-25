@@ -17,21 +17,72 @@
                     </div>
                     <div class="card-content">
                         <div class="card-body">
-                            <table class="table text-center tableDataShow" style="background-color: #fff;border-radius: 5px;">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th class="border">#</th>
-                                    <th class="border">نوع مشتری</th>
-                                    <th class="border">مخاطب</th>
-                                    <th class="border">استان</th>
-                                    <th class="border">شهر</th>
-                                    <th class="border">گروه مخاطب</th>
-                                    <th class="border">نحوه آشنایی</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table text-center table-striped table-hover tableDataShow"
+                                       style="background-color: #fff;border-radius: 5px;">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th class="border">شناسه</th>
+                                        <th class="border">نوع مشتری</th>
+                                        <th class="border">مخاطب</th>
+                                        <th class="border">استان</th>
+                                        <th class="border">شهر</th>
+                                        <th class="border">گروه مخاطب</th>
+                                        <th class="border">نحوه آشنایی</th>
+                                        <th class="border">عملیات</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach $list as $item}
+                                        <tr>
+                                            <td class="border">{$item->id}</td>
+                                            <td class="border">
+                                                {if $item->contact_type == 1}
+                                                    حقیقی
+                                                {else}
+                                                    حقوقی
+                                                {/if}
+                                            </td>
+                                            <td class="border">
+                                                {$item->first_name} {$item->last_name}
+                                            </td>
+                                            <td class="border">
+                                                {$item->stateDate->title}
+                                            </td>
+                                            <td class="border">
+                                                {$item->cityDate->title}
+                                            </td>
+                                            <td class="border">
+                                                {$item->contactGroupData->title}
+                                            </td>
+                                            <td class="border">
+                                                {$item->contactAcquisitionSource->title}
+                                            </td>
+                                            <td class="border">
+                                                <div class="dropup">
+                                                    <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
+                                                          data-toggle="dropdown" aria-haspopup="true"
+                                                          aria-expanded="false" role="menu">
+                                                    </span>
+                                                    <div class="dropdown-menu" x-placement="bottom-start">
+                                                        <a class="dropdown-item text-warning" href="#">
+                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> پیگیری
+                                                        </a>
+                                                        <a class="dropdown-item text-warning" href="#">
+                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> ویرایش
+                                                        </a>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="bx bx-trash text-danger mr-1"></i>
+                                                            حذف
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
