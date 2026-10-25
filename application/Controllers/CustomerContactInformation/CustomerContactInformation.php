@@ -45,7 +45,7 @@ class CustomerContactInformation extends ControllerScheme
         ],
             ['vendors/css/tables/datatable/datatables.min'],
             [
-                'list' => CustomerContactInformationModel::query()->get()
+                'list' => CustomerContactInformationModel::query()->orderByDesc('id')->get()
             ])->display('CustomerContactInformation/CustomerContactInformation.tpl');
     }
 
@@ -142,8 +142,8 @@ class CustomerContactInformation extends ControllerScheme
             $data = $this->requestArray()['contactPhone'];
             foreach ($data as $item) {
                 $this->checkRequired([
-                    'contact_phone_label_id',
-                    'phone_number',
+                    'contact_phone_label_id'=>'عنوان تماس',
+                    'phone_number'=>'شمارخ تماس',
                 ], $item);
                 $item['contact_id'] = $contactId;
                 $item['user_id'] = userObject()->userId;
@@ -163,9 +163,9 @@ class CustomerContactInformation extends ControllerScheme
         $data = $this->requestArray();
         if (isset($data['projectRequest'])) {
             $this->checkRequired([
-                'payment_type',
-                'purchase_type',
-                'industry_type_id',
+                'payment_type'=>'نوع پرداخت',
+                'purchase_type'=>'نوع خرید',
+                'industry_type_id'=>'نوع صنعت',
             ], $data);
             $makeData = [
                 'contact_id' => $contactId,
@@ -201,7 +201,7 @@ class CustomerContactInformation extends ControllerScheme
     {
         $data = $this->requestArray();
         $this->checkRequired([
-            'FollowUp_action_id'
+            'FollowUp_action_id'=>'عنوان پیگیری بعد'
         ], $data);
         $makeData = [
             'contact_project_id' => $contactProjectId,
@@ -218,7 +218,6 @@ class CustomerContactInformation extends ControllerScheme
         $addContact = $this->addContactInfo();
         $this->addContactPhones($addContact);
         $addContactProject = $this->addContactProject($addContact);
-        //add contact project
         $this->addFollowUp($addContactProject);
         $this->successCallBack('/CustomerContactInformation/main');
     }
