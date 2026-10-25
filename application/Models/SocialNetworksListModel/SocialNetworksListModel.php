@@ -2,7 +2,9 @@
 
 namespace App\Models\SocialNetworksListModel;
 
+use App\Models\ContactPhonesModel\ContactPhonesModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SocialNetworksListModel extends Model
@@ -20,5 +22,14 @@ class SocialNetworksListModel extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function contactPhones(): BelongsToMany
+    {
+        return $this->belongsToMany(ContactPhonesModel::class,
+            'ContactSocialNetworks',
+            'contact_phone_id',
+            'social_network_id'
+        );
+    }
 
 }
