@@ -73,7 +73,7 @@ $(function () {
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="checkbox checkbox-primary checkbox-glow">
-                                            <input type="checkbox" name="social_" id="socialBox_${makeId}">
+                                            <input type="checkbox" name="contactPhone[${count}][socialList][]" value="${item.id}" id="socialBox_${makeId}">
                                             <label for="socialBox_${makeId}"><img src="${item.icon}" alt="${item.title}" width="20" height="20"></label>
                                         </div>
                                     </fieldset>
