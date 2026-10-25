@@ -53,10 +53,10 @@ $(function () {
         $(".carsOptionsSelect").select2({
             width: '100%'
         })
-        $(".removeRequestRow").off().on('click', function () {
+        $(".removeRequestRow").on('click', function () {
             $(this).closest('tr').remove()
         })
-        $(".carBrandId").off().on('change',function () {
+        $(".carBrandId").on('change',function () {
             let rowCount = $(this).data('count')
             $(`#car_model_id_${rowCount}`).empty().append('<option selected disabled>مدل خودرو</option>')
             $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
@@ -70,7 +70,7 @@ $(function () {
                 }
             })
         })
-        $(".carModelId").off().on('change',function () {
+        $(".carModelId").on('change',function () {
             let rowCount = $(this).data('count')
             $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
             $(this).getOptionsValue({
