@@ -74,7 +74,7 @@ class CustomerContactInformation extends ControllerScheme
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
         //name this model
-        view->setModel();
+        view->setModel(CustomerContactInformationModel::query()->find($id));
         view->ui([
             //'js/CustomerContactInformation/edit-CustomerContactInformation'
         ], [], [
@@ -136,18 +136,21 @@ class CustomerContactInformation extends ControllerScheme
         }
     }
 
-    private function addContactPhones($contactId): void
+    private function addContactPhonesAndSocialNetWorks($contactId): void
     {
-        if (isset($this->requestArray()['contactPhone'])) {
-            $data = $this->requestArray()['contactPhone'];
-            foreach ($data as $item) {
-                $this->checkRequired([
-                    'contact_phone_label_id'=>'عنوان تماس',
-                    'phone_number'=>'شمارخ تماس',
-                ], $item);
-                $item['contact_id'] = $contactId;
-                $item['user_id'] = userObject()->userId;
-                ContactPhonesModel::query()->create($item);
+        $data = $this->requestArray('contactPhone', []);
+        foreach ($data as $item) {
+            $this->checkRequired([
+                'contact_phone_label_id' => 'عنوان تماس',
+                'phone_number' => 'شماره تماس',
+            ], $item);
+            $socialList = $item['socialList'] ?? [];
+            unset($item['socialList']);
+            $item['contact_id'] = $contactId;
+            $item['user_id'] = userObject()->userId;
+            $addPhoneContact = ContactPhonesModel::query()->create($item);
+            if (!empty($socialList)) {
+                $addPhoneContact->socialNetworks()->attach($socialList);
             }
         }
     }
@@ -161,21 +164,21 @@ class CustomerContactInformation extends ControllerScheme
     private function addContactProject(int $contactId)
     {
         $data = $this->requestArray();
-        if (isset($data['projectRequest'])) {
-            $this->checkRequired([
-                'payment_type'=>'نوع پرداخت',
-                'purchase_type'=>'نوع خرید',
-                'industry_type_id'=>'نوع صنعت',
-            ], $data);
-            $makeData = [
-                'contact_id' => $contactId,
-                'project_code' => $this->createProjectCode($contactId),
-                'payment_type' => $data['payment_type'],
-                'purchase_type' => $data['purchase_type'],
-                'industry_type_id' => $data['industry_type_id'],
-                'user_id' => userObject()->userId,
-            ];
-            $addProject = ContactProjectsModel::query()->create($makeData);
+        $this->checkRequired([
+            'payment_type' => 'نوع پرداخت',
+            'purchase_type' => 'نوع خرید',
+            'industry_type_id' => 'نوع صنعت',
+        ], $data);
+        $makeData = [
+            'contact_id' => $contactId,
+            'project_code' => $this->createProjectCode($contactId),
+            'payment_type' => $data['payment_type'],
+            'purchase_type' => $data['purchase_type'],
+            'industry_type_id' => $data['industry_type_id'],
+            'user_id' => userObject()->userId,
+        ];
+        $addProject = ContactProjectsModel::query()->create($makeData);
+        if (isset($data['projectRequest'])){
             if ($addProject) {
                 foreach ($data['projectRequest'] as $item) {
                     ContactProjectRequestsModel::query()->create([
@@ -192,8 +195,8 @@ class CustomerContactInformation extends ControllerScheme
             } else {
                 return false;
             }
-        } else {
-            return false;
+        }else{
+            return $addProject->id;
         }
     }
 
@@ -201,7 +204,7 @@ class CustomerContactInformation extends ControllerScheme
     {
         $data = $this->requestArray();
         $this->checkRequired([
-            'FollowUp_action_id'=>'عنوان پیگیری بعد'
+            'FollowUp_action_id' => 'عنوان پیگیری بعد'
         ], $data);
         $makeData = [
             'contact_project_id' => $contactProjectId,
@@ -216,7 +219,7 @@ class CustomerContactInformation extends ControllerScheme
     public function add()
     {
         $addContact = $this->addContactInfo();
-        $this->addContactPhones($addContact);
+        $this->addContactPhonesAndSocialNetWorks($addContact);
         $addContactProject = $this->addContactProject($addContact);
         $this->addFollowUp($addContactProject);
         $this->successCallBack('/CustomerContactInformation/main');
