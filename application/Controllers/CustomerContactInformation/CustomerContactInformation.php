@@ -5,6 +5,7 @@ namespace App\Controllers\CustomerContactInformation;
 use App\Controllers\scheme\ControllerScheme;
 use App\Models\CarsBrandModel\CarsBrandModel;
 use App\Models\CarsGroupModel\CarsGroupModel;
+use App\Models\CityModel\CityModel;
 use App\Models\CompaniesModel\CompaniesModel;
 use App\Models\ContactAcquisitionSourcesModel\ContactAcquisitionSourcesModel;
 use App\Models\ContactPhonesModel\ContactPhonesModel;
@@ -15,6 +16,7 @@ use App\Models\ContactsGroupModel\ContactsGroupModel;
 use App\Models\CustomerContactInformationModel\CustomerContactInformationModel;
 use App\Models\FollowUpActionsTitleModel\FollowUpActionsTitleModel;
 use App\Models\IndustryTypeModel\IndustryTypeModel;
+use App\Models\SocialNetworksListModel\SocialNetworksListModel;
 use App\Models\StateModel\StateModel;
 use InvalidArgumentException;
 use Packages\View\handleHttpErrorView;
@@ -51,6 +53,7 @@ class CustomerContactInformation extends ControllerScheme
 
     public function addIndex(): void
     {
+        $_ENV['APP_DEBUG'] = 1;
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -60,26 +63,99 @@ class CustomerContactInformation extends ControllerScheme
             'js/CustomerContactInformation/ContactPhones',
             'js/CustomerContactInformation/ContactProject',
             'js/CustomerContactInformation/ContactFollowUp',
-        ], [],
+        ], [
+            'css/CustomerContactInformation/ContactInfo',
+            'css/CustomerContactInformation/followUpStyle',
+        ],
             [
                 'IndustryType' => IndustryTypeModel::query()->get(),
-                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get()
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
             ]
         )->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
     }
 
-    public function editIndex($id)
+    public function followUpIndex($id = null)
     {
+        $_ENV['APP_DEBUG'] = 1;
+//        try {
+        $contactData = CustomerContactInformationModel::with([
+            'projectData'
+        ])->where('user_id',userObject()->userId)->findOrFail($id);
+
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
-        //name this model
-        view->setModel(CustomerContactInformationModel::query()->find($id));
         view->ui([
-            //'js/CustomerContactInformation/edit-CustomerContactInformation'
-        ], [], [
-            //var
-        ])->display('CustomerContactInformation/edit-CustomerContactInformation.tpl');
+            'js/CustomerContactInformation/add-CustomerContactInformation',
+            'js/CustomerContactInformation/ContactInfo',
+            'js/CustomerContactInformation/ContactPhones',
+            'js/CustomerContactInformation/ContactProject',
+            'js/CustomerContactInformation/ContactFollowUp',
+        ], [
+            'css/CustomerContactInformation/ContactInfo',
+            'css/CustomerContactInformation/followUpStyle',
+        ], [
+            'contactData' => $contactData,
+            'IndustryType' => IndustryTypeModel::query()->get(),
+            'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+            'ContactGroups' => ContactsGroupModel::query()->get(),
+            'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
+            'states' => StateModel::query()->get(),
+            'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
+            'contactPhones' => ContactPhonesModel::query()->with([
+                'socialNetworks'
+            ])->where('contact_id', $contactData->id)->get(),
+            'socialNetWorksList' => SocialNetworksListModel::query()->get(),
+            'toDayFollowUpCount' => (function () use ($contactData) {
+                $get = $contactData->projectData;
+                $count = 0;
+                foreach ($get as $item) {
+                    $followUp = $item->followUpData()->where('next_followUp_date', '=', strtotime('toDay'))->get()->toArray();
+                    foreach ($followUp as $row) {
+                        $count++;
+                    }
+                }
+                return $count;
+            })(),
+            'toDayFollowUpActionCount' => (function () use ($contactData) {
+                $get = $contactData->projectData;
+                $count = 0;
+                foreach ($get as $item) {
+                    foreach ($item->followUpData as $row) {
+                        $actions = $row->followUpActions()->where('action_time', '>', strtotime('toDay'))->get()->toArray();
+                        if (count($actions) > 0) {
+                            $count++;
+                        }
+                    }
+                }
+                return $count;
+            })(),
+            'pastFollowUpCount' => (function () use ($contactData) {
+                $get = $contactData->projectData;
+                $count = 0;
+                foreach ($get as $item) {
+                    $followUp = $item->followUpData()->where('next_followUp_date', '<', strtotime('toDay'))->get()->toArray();
+                    foreach ($followUp as $row) {
+                        $count++;
+                    }
+                }
+                return $count;
+            })(),
+            'nextFollowUpCount' => (function () use ($contactData) {
+                $get = $contactData->projectData;
+                $count = 0;
+                foreach ($get as $item) {
+                    $followUp = $item->followUpData()->where('next_followUp_date', '>', strtotime('toDay'))->get()->toArray();
+                    foreach ($followUp as $row) {
+                        $count++;
+                    }
+                }
+                return $count;
+            })()
+        ])->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
+//        } catch (\Exception $e) {
+//            handleHttpErrorView::handle(404, 'اطلاعاتی یافت نشد');
+//        }
     }
 
 
@@ -178,7 +254,7 @@ class CustomerContactInformation extends ControllerScheme
             'user_id' => userObject()->userId,
         ];
         $addProject = ContactProjectsModel::query()->create($makeData);
-        if (isset($data['projectRequest'])){
+        if (isset($data['projectRequest'])) {
             if ($addProject) {
                 foreach ($data['projectRequest'] as $item) {
                     ContactProjectRequestsModel::query()->create([
@@ -195,7 +271,7 @@ class CustomerContactInformation extends ControllerScheme
             } else {
                 return false;
             }
-        }else{
+        } else {
             return $addProject->id;
         }
     }
