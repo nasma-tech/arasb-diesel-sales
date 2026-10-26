@@ -37,7 +37,7 @@ $(function () {
                     </select>
                 </td>
                 <td class="border" width="150">
-                    <input class="form-control requestAmount" dir="ltr" type="number" id="request_amount" data-count="${counter}" name="projectRequest[${counter}][request_amount]">
+                    <input class="form-control requestAmount" dir="ltr" type="text" id="request_amount" data-count="${counter}" name="projectRequest[${counter}][request_amount]">
                 </td>
                 <td class="border">
                     <button class="btn btn-xs btn-icon btn-danger removeRequestRow">
@@ -48,41 +48,47 @@ $(function () {
         `
     }
     let productCounter = 1;
-    $("#productAppend").on('click', function () {
+
+    $("#productAppend").on('click',function () {
         $("#productRequestTableBody").append(makeProductRow(productCounter))
         $(".carsOptionsSelect").select2({
             width: '100%'
         })
-        $(".removeRequestRow").on('click', function () {
-            $(this).closest('tr').remove()
-        })
-        $(".carBrandId").on('change',function () {
-            let rowCount = $(this).data('count')
-            $(`#car_model_id_${rowCount}`).empty().append('<option selected disabled>مدل خودرو</option>')
-            $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
-            $(this).getOptionsValue({
-                urlAddress: '/CarsModel/getCarModel', callback: result => {
-                    $.each(result, function (key, item) {
-                        $(`#car_model_id_${rowCount}`).append(`<option value="${item.id}">${item.title}</option>`)
-                    })
-                },requestData:{
-                    carBrandId :$(this).val()
-                }
-            })
-        })
-        $(".carModelId").on('change',function () {
-            let rowCount = $(this).data('count')
-            $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
-            $(this).getOptionsValue({
-                urlAddress: '/CarsTip/getCarTips', callback: result => {
-                    $.each(result, function (key, item) {
-                        $(`#car_tip_id_${rowCount}`).append(`<option value="${item.id}">${item.title}</option>`)
-                    })
-                },requestData:{
-                    carModelId :$(this).val()
-                }
-            })
-        })
+        $(".requestAmount").numberInput(2)
         productCounter++
     })
+
+    $("#productRequestTableBody").on('click','.removeRequestRow',function () {
+        $(this).closest('tr').remove()
+    })
+
+    $("#productRequestTableBody").on('change','.carBrandId',function () {
+        let rowCount = $(this).data('count')
+        $(`#car_model_id_${rowCount}`).empty().append('<option selected disabled>مدل خودرو</option>')
+        $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
+        $(this).getOptionsValue({
+            urlAddress: '/CarsModel/getCarModel', callback: result => {
+                $.each(result, function (key, item) {
+                    $(`#car_model_id_${rowCount}`).append(`<option value="${item.id}">${item.title}</option>`)
+                })
+            },requestData:{
+                carBrandId :$(this).val()
+            }
+        })
+    })
+
+    $("#productRequestTableBody").on('change','.carModelId',function () {
+        let rowCount = $(this).data('count')
+        $(`#car_tip_id_${rowCount}`).empty().append('<option selected disabled>تیپ خودرو</option>')
+        $(this).getOptionsValue({
+            urlAddress: '/CarsTip/getCarTips', callback: result => {
+                $.each(result, function (key, item) {
+                    $(`#car_tip_id_${rowCount}`).append(`<option value="${item.id}">${item.title}</option>`)
+                })
+            },requestData:{
+                carModelId :$(this).val()
+            }
+        })
+    })
+
 })
