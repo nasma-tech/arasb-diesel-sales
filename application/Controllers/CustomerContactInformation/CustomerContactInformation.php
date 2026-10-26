@@ -45,7 +45,10 @@ class CustomerContactInformation extends ControllerScheme
             'vendors/js/tables/datatable/buttons.colVis.min',
             //'js/CustomerContactInformation/CustomerContactInformation'
         ],
-            ['vendors/css/tables/datatable/datatables.min'],
+            [
+                'vendors/css/tables/datatable/datatables.min',
+                'css/CustomerContactInformation/CustomerContactInformation'
+            ],
             [
                 'list' => CustomerContactInformationModel::query()->orderByDesc('id')->get()
             ])->display('CustomerContactInformation/CustomerContactInformation.tpl');
@@ -75,8 +78,6 @@ class CustomerContactInformation extends ControllerScheme
 
     public function followUpIndex($id = null)
     {
-        $_ENV['APP_DEBUG'] = 1;
-//        try {
         $contactData = CustomerContactInformationModel::with([
             'projectData'
         ])->where('user_id',userObject()->userId)->findOrFail($id);
@@ -152,14 +153,20 @@ class CustomerContactInformation extends ControllerScheme
                 return $count;
             })()
         ])->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
-//        } catch (\Exception $e) {
-//            handleHttpErrorView::handle(404, 'اطلاعاتی یافت نشد');
-//        }
     }
 
+    private function generateCustomerCode() :int
+    {
+        do {
+            $code = random_int(100000, 999999);
+            $exists = CustomerContactInformationModel::query()->where('contact_code', $code)->exists();
+        } while ($exists);
+        return $code;
+    }
 
     private function addContactInfo()
     {
+        $_ENV['APP_DEBUG'] = 1;
         $data = $this->requestArray();
         $this->checkRequired([
             'first_name' => 'نام',
@@ -173,6 +180,7 @@ class CustomerContactInformation extends ControllerScheme
             'last_name' => $data['last_name'],
             'contact_group_id' => $data['contact_group_id'],
             'contact_acquisition_source_id' => $data['contact_acquisition_source_id'],
+            'contact_code'=>$this->generateCustomerCode()
         ];
         if ($data['contact_type'] == 1) {
             $this->checkRequired([
@@ -185,7 +193,7 @@ class CustomerContactInformation extends ControllerScheme
                 'city_id' => $data['city_id'],
                 'user_id' => userObject()->userId,
             ];
-            $mergeData = array_merge($dataForm, $data);
+            $mergeData = array_merge($subscriberData,$dataForm);
             return CustomerContactInformationModel::query()->create($mergeData)->id;
         } elseif ($data['contact_type'] == 2) {
             $this->checkRequired([
