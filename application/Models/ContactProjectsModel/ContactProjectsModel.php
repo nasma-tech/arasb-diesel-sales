@@ -2,7 +2,9 @@
 
 namespace App\Models\ContactProjectsModel;
 
+use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContactProjectsModel extends Model
@@ -24,5 +26,10 @@ class ContactProjectsModel extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function followUpData(): HasMany
+    {
+        return $this->hasMany(ContactProjectsFollowUpModel::class,'contact_project_id','id');
+    }
 
 }
