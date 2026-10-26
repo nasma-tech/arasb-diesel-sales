@@ -2,9 +2,11 @@
 
 namespace App\Models\ContactPhonesModel;
 
+use App\Models\ContactPhoneLabelModel\ContactPhoneLabelModel;
 use App\Models\SocialNetworksListModel\SocialNetworksListModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContactPhonesModel extends Model
@@ -30,6 +32,11 @@ class ContactPhonesModel extends Model
             'contact_phone_id',
             'social_network_id'
         );
+    }
+
+    public function phoneLabelData(): HasOne
+    {
+        return $this->hasOne(ContactPhoneLabelModel::class,'id','contact_phone_label_id');
     }
 
 }
