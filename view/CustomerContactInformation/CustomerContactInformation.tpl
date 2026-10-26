@@ -1,7 +1,6 @@
 {include 'sections/header.tpl'}
 {include 'sections/top-bar.tpl'}
 {include 'sections/side-menu.tpl'}
-
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -23,6 +22,7 @@
                                     <thead class="thead-dark">
                                     <tr>
                                         <th class="border">شناسه</th>
+                                        <th class="border">کد مشتری</th>
                                         <th class="border">نوع مشتری</th>
                                         <th class="border">مخاطب</th>
                                         <th class="border">استان</th>
@@ -35,7 +35,10 @@
                                     <tbody>
                                     {foreach $list as $item}
                                         <tr>
-                                            <td class="border">{$item->id}</td>
+                                            <td class="border text-center">{$item.id}</td>
+                                            <td class="border text-center">
+                                                <kbd class="cc-code-badge">{$item.contact_code}</kbd>
+                                            </td>
                                             <td class="border">
                                                 {if $item->contact_type == 1}
                                                     حقیقی
