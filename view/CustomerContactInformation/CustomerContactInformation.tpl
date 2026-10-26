@@ -65,11 +65,9 @@
                                                           aria-expanded="false" role="menu">
                                                     </span>
                                                     <div class="dropdown-menu" x-placement="bottom-start">
-                                                        <a class="dropdown-item text-warning" href="#">
-                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> پیگیری
-                                                        </a>
-                                                        <a class="dropdown-item text-warning" href="#">
-                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> ویرایش
+                                                        <a class="dropdown-item text-primary"
+                                                           href="/CustomerContactInformation/followUpIndex/{$item->id}">
+                                                            <i class="bx bxs-chip mr-1 text-primary"></i> پیگیری
                                                         </a>
                                                         <a class="dropdown-item text-danger" href="#">
                                                             <i class="bx bx-trash text-danger mr-1"></i>
