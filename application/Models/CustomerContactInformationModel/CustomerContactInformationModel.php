@@ -5,10 +5,12 @@ namespace App\Models\CustomerContactInformationModel;
 use App\Models\CityModel\CityModel;
 use App\Models\CompaniesModel\CompaniesModel;
 use App\Models\ContactAcquisitionSourcesModel\ContactAcquisitionSourcesModel;
+use App\Models\ContactProjectsModel\ContactProjectsModel;
 use App\Models\ContactsGroupModel\ContactsGroupModel;
 use App\Models\StateModel\StateModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -42,6 +44,11 @@ class CustomerContactInformationModel extends Model
             'contact_id',
             'company_id'
         );
+    }
+
+    public function projectData(): HasMany
+    {
+        return $this->hasMany(ContactProjectsModel::class,'contact_id','id');
     }
 
     public function stateDate(): HasOne
