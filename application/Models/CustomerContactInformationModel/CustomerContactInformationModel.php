@@ -23,6 +23,7 @@ class CustomerContactInformationModel extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'contact_code',
         'first_name',
         'last_name',
         'contact_type',
