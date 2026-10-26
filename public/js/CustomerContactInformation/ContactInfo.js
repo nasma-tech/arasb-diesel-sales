@@ -63,7 +63,6 @@ $(function () {
         </div>
       `
     }
-
     const legalForm = () => {
         return `
             ${subscriberForm()}
@@ -72,7 +71,7 @@ $(function () {
                 <input class="form-control" id="national_ID" name="national_ID">
             </div>
             <div class="col-md-4 mt-2">
-                <label for="">کد اقتصادی</label>
+                <label for="economic_code">کد اقتصادی</label>
                 <input class="form-control" id="economic_code" name="economic_code">
             </div>
             <div class="col-md-4 mt-2">
@@ -138,6 +137,21 @@ $(function () {
             }
         })
     })
-    $(".selectContactTypeButton")[0].click()
+
+
+    //follow up
+    $("#state_id").getOptions({
+        urlAddress: "/cities/getFilterCities", callback: result => {
+            $("#city_id").empty();
+            $.each(result, function (key, item) {
+                $("#city_id").append(`<option value="${item.id}">${item.title}</option>`).attr('disabled', false)
+            })
+            $("#city_id").select2()
+        }
+    })
+    let locationUrl = window.location.href;
+    if (locationUrl.search('followUp') < 0) {
+        $(".selectContactTypeButton")[0].click()
+    }
 
 })
