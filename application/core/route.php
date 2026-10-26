@@ -163,9 +163,14 @@ $router->mount('/IssuingPlace', function () use ($router) {
         ]
     ]);
 });
-
 $router->mount('/CustomerContactInformation', function () use ($router) {
-    dynamicRoute($router, CustomerContactInformation::class);
+    dynamicRoute($router, CustomerContactInformation::class,[
+        [
+            'method' => 'GET',
+            'path' => '/followUpIndex(/\d+)?',
+            'action' => 'followUpIndex'
+        ]
+    ]);
 });
 $router->mount('/ContactsGroup', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactsGroup\ContactsGroup::class, [
@@ -242,7 +247,6 @@ $router->mount('/ContactPhones', function () use ($router) {
 $router->mount('/Companies', function () use ($router) {
     dynamicRoute($router, App\Controllers\Companies\Companies::class);
 });
-
 $router->mount('/ContactProjects', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactProjects\ContactProjects::class);
 });
