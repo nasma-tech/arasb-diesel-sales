@@ -1,5 +1,5 @@
 <div class="col-md-6 pl-md-0">
-    <div class="card shadow" style="margin-top: 4px;height: 100%">
+    <div class="card shadow cc-initial-info" style="margin-top: 4px;height: 100%">
         <div class="card-content">
             <div class="card-header">
                 <div class="divider divider-left">
