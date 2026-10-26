@@ -853,3 +853,106 @@
         height: 23px !important;
     }
 }
+
+
+/*test*/
+
+/* Modern Contact Tabs */
+.cc-modern-tabs {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    margin-bottom: 18px;
+    background: #f1f4f9;
+    border: 1px solid #e6eaf1;
+    border-radius: 12px;
+    list-style: none;
+    direction: rtl;
+}
+
+/* Tab item */
+.cc-modern-tabs .nav-item {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Tab link */
+.cc-modern-tabs .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 43px;
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #68758a;
+    font-family: "Vazirmatn", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.7;
+    text-align: center;
+    white-space: normal;
+    transition:
+            color 0.22s ease,
+            background 0.22s ease,
+            border-color 0.22s ease,
+            box-shadow 0.22s ease,
+            transform 0.22s ease;
+}
+
+/* Hover */
+.cc-modern-tabs .nav-link:not(.active):hover {
+    color: #206bc4;
+    background: rgba(255, 255, 255, 0.75);
+    border-color: #e1e9f5;
+}
+
+/* Active tab */
+.cc-modern-tabs .nav-link.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, #263f6a 0%, #172844 100%);
+    border-color: transparent;
+    box-shadow:
+            0 3px 8px rgba(23, 40, 68, 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Active hover */
+.cc-modern-tabs .nav-link.active:hover {
+    color: #ffffff;
+    box-shadow: 0 5px 12px rgba(23, 40, 68, 0.2);
+}
+
+/* Keyboard focus */
+.cc-modern-tabs .nav-link:focus-visible {
+    outline: 2px solid #206bc4;
+    outline-offset: 2px;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .cc-modern-tabs {
+        gap: 4px;
+        padding: 4px;
+        border-radius: 10px;
+    }
+
+    .cc-modern-tabs .nav-link {
+        min-height: 40px;
+        padding: 8px 6px;
+        font-size: 11px;
+        gap: 4px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .cc-modern-tabs .nav-link {
+        transition: none;
+    }
+}

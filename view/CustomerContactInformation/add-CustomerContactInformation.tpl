@@ -24,18 +24,29 @@
                 <div class="card shadow">
                     <div class="card-content">
                         <div class="card-body">
-                            <ul class="nav nav-pills nav-justified">
+
+                            <ul class="nav nav-pills nav-justified cc-modern-tabs">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="contact-tab-justified" data-toggle="pill"
-                                       href="#contact-justified" aria-expanded="true">اطلاعات مخاطب
+                                    <a class="nav-link active"
+                                       id="contact-tab-justified"
+                                       data-toggle="pill"
+                                       href="#contact-justified"
+                                       aria-expanded="true">
+                                        اطلاعات مخاطب
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a class="nav-link" id="followUpHistory-tab-justified" data-toggle="pill"
-                                       href="#followUpHistory-justified" aria-expanded="false">تاریخچه پیگیری ها
+                                    <a class="nav-link"
+                                       id="followUpHistory-tab-justified"
+                                       data-toggle="pill"
+                                       href="#followUpHistory-justified"
+                                       aria-expanded="false">
+                                        تاریخچه پیگیری‌ها
                                     </a>
                                 </li>
                             </ul>
+
                         </div>
                     </div>
                 </div>
