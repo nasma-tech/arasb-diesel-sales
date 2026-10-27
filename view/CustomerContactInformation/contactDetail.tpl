@@ -53,19 +53,14 @@
                 <div class="tab-content" style="margin-top: 3px">
                     <div role="tabpanel" class="tab-pane active" id="contact-justified"
                          aria-labelledby="contact-tab-justified" aria-expanded="true">
-                        <form action="/CustomerContactInformation/add" method="post">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {include 'CustomerContactInformation/ContactInfo.tpl'}
-                                </div>
-                                <div class="col-md-6 pl-0">
-                                    {include 'CustomerContactInformation/ContactPhones.tpl'}
-                                </div>
-                                <div class="col-md-6">
-                                    {include 'CustomerContactInformation/ContactProjectFollowUp.tpl'}
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {include 'CustomerContactInformation/ContactInfo.tpl'}
                             </div>
-                        </form>
+                            <div class="col-md-6 pl-0">
+                                {include 'CustomerContactInformation/ContactPhones.tpl'}
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="projectList-justified" role="tabpanel"
                          aria-labelledby="projectList-tab-justified" aria-expanded="false">
@@ -76,8 +71,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 {include 'sections/footer.tpl'}
