@@ -5,6 +5,7 @@ namespace App\Models\ContactProjectsModel;
 use App\Controllers\users\users;
 use App\Models\ContactProjectRequestsModel\ContactProjectRequestsModel;
 use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
+use App\Models\CustomerContactInformationModel\CustomerContactInformationModel;
 use App\Models\IndustryTypeModel\IndustryTypeModel;
 use App\Models\UserModel\UserModel;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,11 @@ class ContactProjectsModel extends Model
         'deleted_at'
     ];
 
+    public function contactData(): HasOne
+    {
+        return $this->hasOne(CustomerContactInformationModel::class,'id','contact_id');
+    }
+
     public function projectRequests(): HasMany
     {
         return $this->hasMany(ContactProjectRequestsModel::class,'contact_project_id','id');
@@ -39,7 +45,7 @@ class ContactProjectsModel extends Model
 
     public function followUpData(): HasMany
     {
-        return $this->hasMany(ContactProjectsFollowUpModel::class,'contact_project_id','id');
+        return $this->hasMany(ContactProjectsFollowUpModel::class,'contact_project_id','id')->orderByDesc('id');
     }
 
     public function industryTypeData() :HasOne
