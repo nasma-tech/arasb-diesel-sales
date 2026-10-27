@@ -47,19 +47,19 @@
                                                 {/if}
                                             </td>
                                             <td class="border">
-                                                {$item->first_name} {$item->last_name}
+                                                {$item->first_name|default:''} {$item->last_name|default:''}
                                             </td>
                                             <td class="border">
-                                                {$item->stateDate->title}
+                                                {$item->stateDate->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->cityDate->title}
+                                                {$item->cityDate->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->contactGroupData->title}
+                                                {$item->contactGroupData->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->contactAcquisitionSource->title}
+                                                {$item->contactAcquisitionSource->title|default:'-'}
                                             </td>
                                             <td class="border">
                                                 <div class="dropup">
