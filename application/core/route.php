@@ -255,7 +255,13 @@ $router->mount('/Companies', function () use ($router) {
     dynamicRoute($router, App\Controllers\Companies\Companies::class);
 });
 $router->mount('/ContactProjects', function () use ($router) {
-    dynamicRoute($router, App\Controllers\ContactProjects\ContactProjects::class);
+    dynamicRoute($router, App\Controllers\ContactProjects\ContactProjects::class, [
+        [
+            'method' => 'GET',
+            'path' => "/ContactProjectDetail(/\d+)",
+            'action' => 'ContactProjectDetail'
+        ]
+    ]);
 });
 $router->mount('/ContactProjectsFollowUp', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactProjectsFollowUp\ContactProjectsFollowUp::class);
