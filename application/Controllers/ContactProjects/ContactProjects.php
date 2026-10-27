@@ -1,12 +1,20 @@
 <?php
+
 namespace App\Controllers\ContactProjects;
+
+use App\Controllers\CustomerContactInformation\CustomerContactInformation;
 use App\Controllers\scheme\ControllerScheme;
-class ContactProjects extends ControllerScheme{
-        const string singleName = '';
-        const string pluralName = '';
-        protected string $defaultModel = ContactProjectsModel::class;
-        
-        public function main(){
+use App\Models\ContactProjectRequestsModel\ContactProjectRequestsModel;
+use App\Models\ContactProjectsModel\ContactProjectsModel;
+
+class ContactProjects extends ControllerScheme
+{
+    const string singleName = '';
+    const string pluralName = '';
+    protected string $defaultModel = ContactProjectsModel::class;
+
+    public function main()
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -25,23 +33,25 @@ class ContactProjects extends ControllerScheme{
         ],
             ['vendors/css/tables/datatable/datatables.min'],
             [
-            //vars
-                ])->display('ContactProjects/ContactProjects.tpl');
+                //vars
+            ])->display('ContactProjects/ContactProjects.tpl');
     }
-    
-        public function addIndex(){
-                view->setPageTitle(self::pluralName);
-                view->setSingleName(self::singleName);
-                view->setPluralName(self::pluralName);
-                view->ui([
-                    //'js/ContactProjects/add-ContactProjects'
-                ], [],
-                    [//vars
-                    ]
-                )->display('ContactProjects/add-ContactProjects.tpl');
-            }
-            
-        public function editIndex($id){
+
+    public function addIndex()
+    {
+        view->setPageTitle(self::pluralName);
+        view->setSingleName(self::singleName);
+        view->setPluralName(self::pluralName);
+        view->ui([
+            //'js/ContactProjects/add-ContactProjects'
+        ], [],
+            [//vars
+            ]
+        )->display('ContactProjects/add-ContactProjects.tpl');
+    }
+
+    public function editIndex($id)
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -49,8 +59,50 @@ class ContactProjects extends ControllerScheme{
         view->setModel();
         view->ui([
             //'js/ContactProjects/edit-ContactProjects'
-        ],[], [
-        //var
+        ], [], [
+            //var
         ])->display('ContactProjects/edit-ContactProjects.tpl');
     }
+
+    public function add()
+    {
+        $data = $this->requestArray();
+        $customerContact = new CustomerContactInformation();
+        $this->checkRequired([
+            'payment_type' => 'نوع پرداخت',
+            'purchase_type' => 'نوع خرید',
+            'industry_type_id' => 'نوع صنعت',
+        ], $data);
+        $makeData = [
+            'contact_id' => $data['contact_id'],
+            'project_code' => $customerContact->createProjectCode($data['contact_id']),
+            'payment_type' => $data['payment_type'],
+            'purchase_type' => $data['purchase_type'],
+            'industry_type_id' => $data['industry_type_id'],
+            'user_id' => userObject()->userId,
+        ];
+        $addProject = ContactProjectsModel::query()->create($makeData);
+        if (isset($data['projectRequest'])) {
+            if ($addProject) {
+                foreach ($data['projectRequest'] as $item) {
+                    ContactProjectRequestsModel::query()->create([
+                        'contact_project_id' => $addProject->id,
+                        'car_group_id' => $item['car_group_id'],
+                        'car_brand_id' => $item['car_brand_id'],
+                        'car_model_id' => $item['car_model_id'],
+                        'car_tip_id' => $item['car_tip_id'],
+                        'request_amount' => $item['request_amount'],
+                        'user_id' => userObject()->userId,
+                    ]);
+                }
+                return $addProject->id;
+            } else {
+                return false;
+            }
+        } else {
+            return $addProject->id;
+        }
+    }
+
+
 }
