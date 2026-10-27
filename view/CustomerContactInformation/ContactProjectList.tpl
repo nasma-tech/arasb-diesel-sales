@@ -25,7 +25,9 @@
                             {foreach $contactData.projectData|default:[] as $item}
                                 <tr>
                                     <td class="border">{counter}</td>
-                                    <td class="border">{$item.project_code}</td>
+                                    <td class="border">
+                                        <kbd>{$item.project_code}</kbd>
+                                    </td>
                                     <td class="border">{(($item.payment_type == 1)?'نقد':'اقساط')}</td>
                                     <td class="border">{(($item.payment_type == 1)?'نو':'کارکرده')}</td>
                                     <td class="border">{$item.industryTypeData.title}</td>
@@ -37,7 +39,7 @@
                                                           aria-expanded="false" role="menu">
                                                     </span>
                                             <div class="dropdown-menu" x-placement="bottom-start">
-                                                <a class="dropdown-item text-primary" href="#">
+                                                <a class="dropdown-item text-primary" href="/ContactProjects/ContactProjectDetail/{$item.id}" target="_blank">
                                                     <i class="bx bx-circle text-primary mr-1"></i>
                                                     پیگیری
                                                 </a>
@@ -64,7 +66,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="projectLabel">تعریف پروژه جدید</h4>
                 </div>
-                <div class="modal-body line-height-2">
+                <div class="modal-body line-height-2" style="height: 600px">
                     {include 'CustomerContactInformation/ContactProject.tpl'}
                 </div>
                 <div class="modal-footer">
