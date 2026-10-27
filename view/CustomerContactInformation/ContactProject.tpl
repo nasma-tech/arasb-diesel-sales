@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="industry_type_id">نوع صنعت</label>
-                    <select class="form-control select2" id="industry_type_id" name="industry_type_id" {($getData)?'disabled':''}>
+                    <select class="form-control select2" required="required" id="industry_type_id" name="industry_type_id" {($getData)?'disabled':''}>
                         <option selected disabled>یک مورد را انتخاب کنید</option>
                         {foreach $IndustryType as $item}
                             <option value="{$item->id}"{(($getData.industry_type_id|default:'') == $item.id)?'selected':''}>{$item->title}</option>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="payment_type">نوع پرداخت</label>
-                    <select class="form-control select2" id="payment_type" name="payment_type" {($getData)?'disabled':''}>
+                    <select class="form-control select2" required="required" id="payment_type" name="payment_type" {($getData)?'disabled':''}>
                         <option selected disabled>یک مورد را انتخاب کنید</option>
                         <option value="1" {(($getData.payment_type|default:'') == 1)?'selected':''}>نقد</option>
                         <option value="2" {(($getData.payment_type|default:'') == 2)?'selected':''}>اقساط</option>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="purchase_type">نوع خرید</label>
-                    <select class="form-control select2" id="purchase_type" name="purchase_type" {($getData)?'disabled':''}>
+                    <select class="form-control select2" required="required" id="purchase_type" name="purchase_type" {($getData)?'disabled':''}>
                         <option selected disabled>یک مورد را انتخاب کنید</option>
                         <option value="1" {(($getData.purchase_type|default:'') == 1)?'selected':''}>نو</option>
                         <option value="2" {(($getData.purchase_type|default:'') == 2)?'selected':''}>کارکرده</option>

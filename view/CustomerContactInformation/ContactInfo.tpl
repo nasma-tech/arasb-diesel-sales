@@ -25,17 +25,17 @@
             <div class="row" id="mainContactForm">
                 <div class="col-md-4">
                     <label for="first_name">نام</label>
-                    <input class="form-control" id="first_name" name="first_name"
+                    <input class="form-control" required="required" id="first_name" name="first_name"
                            value="{$contactData.first_name|default:''}">
                 </div>
                 <div class="col-md-4">
                     <label for="last_name">نام خانوادگی</label>
-                    <input class="form-control" id="last_name" name="last_name"
+                    <input class="form-control" required="required" id="last_name" name="last_name"
                            value="{$contactData.last_name|default:''}">
                 </div>
                 <div class="col-md-4">
                     <label for="contact_group_id">گروه مشتری</label>
-                    <select class="form-control select2" id="contact_group_id" name="contact_group_id">
+                    <select class="form-control select2" required="required" id="contact_group_id" name="contact_group_id">
                         <option selected disabled>یک مورد را انتخاب کنید</option>
                         {foreach $ContactGroups|default:[] as $item}
                             <option value="{$item->id}"{(($contactData.contact_group_id|default:'') == $item.id) ? 'selected' : ''}>{$item.title}</option>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-md-4 mt-2">
                     <label for="contact_acquisition_source_id">نحوه آشنایی</label>
-                    <select class="form-control select2" id="contact_acquisition_source_id"
+                    <select class="form-control select2" required="required" id="contact_acquisition_source_id"
                             name="contact_acquisition_source_id">
                         <option selected disabled>یک مورد را انتخاب کنید</option>
                         {foreach $ContactAcquisitionSources|default:[] as $item}
@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="state_id">استان محل سکونت</label>
-                        <select class="form-control select2" id="state_id" name="state_id">
+                        <select class="form-control select2" required="required" id="state_id" name="state_id">
                             <option selected disabled>یک استان را انتخاب کنید</option>
                             {foreach $states as $item}
                                 <option value="{$item.id}"{(($contactData.state_id|default:'') == $item.id)?'selected':''}>{$item.title}</option>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="city_id">شهر محل سکونت</label>
-                        <select class="form-control select2" id="city_id" name="city_id">
+                        <select class="form-control select2" required="required" id="city_id" name="city_id">
                             {foreach $cities as $item}
                                 <option value="{$item.id}"{(($contactData.city_id) == $item.id)?'selected':''}>{$item.title}</option>
                             {/foreach}
@@ -112,8 +112,7 @@
             </div>
         </div>
     </div>
-
-    {if $smarty.session.roleId == 0 || $smarty.session.user_id == $contactData.userId}
+    {if isset($contactData) && ($smarty.session.roleId == 0 || $smarty.session.userId == $contactData.userId)}
         <div class="card-footer">
             <button class="btn btn-sm btn-primary float-right">ویرایش اطلاعات اولیه</button>
         </div>
