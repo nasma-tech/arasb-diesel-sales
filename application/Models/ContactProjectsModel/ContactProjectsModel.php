@@ -3,6 +3,7 @@
 namespace App\Models\ContactProjectsModel;
 
 use App\Controllers\users\users;
+use App\Models\ContactProjectRequestsModel\ContactProjectRequestsModel;
 use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
 use App\Models\IndustryTypeModel\IndustryTypeModel;
 use App\Models\UserModel\UserModel;
@@ -30,6 +31,11 @@ class ContactProjectsModel extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function projectRequests(): HasMany
+    {
+        return $this->hasMany(ContactProjectRequestsModel::class,'contact_project_id','id');
+    }
 
     public function followUpData(): HasMany
     {
