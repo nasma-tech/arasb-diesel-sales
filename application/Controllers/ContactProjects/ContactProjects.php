@@ -116,13 +116,9 @@ class ContactProjects extends ControllerScheme
                         'user_id' => userObject()->userId,
                     ]);
                 }
-                return $addProject->id;
-            } else {
-                return false;
             }
-        } else {
-            return $addProject->id;
         }
+        $this->successCallBack("/CustomerContactInformation/contactDetail/{$data['contact_id']}",'پروژه با موفقیت اضافه شد');
     }
 
 
