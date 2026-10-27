@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers\ContactProjectsFollowUp;
 use App\Controllers\scheme\ControllerScheme;
+use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
+
 class ContactProjectsFollowUp extends ControllerScheme{
         const string singleName = '';
         const string pluralName = '';
@@ -52,5 +54,27 @@ class ContactProjectsFollowUp extends ControllerScheme{
         ],[], [
         //var
         ])->display('ContactProjectsFollowUp/edit-ContactProjectsFollowUp.tpl');
+    }
+
+    public function add()
+    {
+        csrf->csrfValidate();
+        $data = $this->requestArray();
+        $this->checkRequired([
+            'FollowUp_action_id' => 'عنوان پیگیری بعد'
+        ], $data);
+        $makeData = [
+            'contact_project_id' => $data['contact_project_id'],
+            'FollowUp_action_id' => $data['FollowUp_action_id'],
+            'next_followUp_date' => dateTimeHelper->convertDateToTimestamp($data['next_followUp_date']),
+            'followUp_description' => $data['followUp_description'],
+            'user_id' => userObject()->userId
+        ];
+        $add = ContactProjectsFollowUpModel::query()->create($makeData);
+        if ($add){
+            $this->successCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'پیگیری با موفقیت اضافه شد');
+        }else{
+            $this->failedCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'افزودن پیگیری با خطا مواجه شد');
+        }
     }
 }
