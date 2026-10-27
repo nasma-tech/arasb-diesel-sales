@@ -58,7 +58,10 @@
                                 {include 'CustomerContactInformation/ContactInfo.tpl'}
                             </div>
                             <div class="col-md-6 pl-0">
-                                {include 'CustomerContactInformation/ContactPhones.tpl'}
+                                <form action="/ContactPhones/add" method="post">
+                                    <input type="hidden" value="{$contactData.id}" required="required" readonly="readonly" name="contact_id">
+                                    {include 'CustomerContactInformation/ContactPhones.tpl'}
+                                </form>
                             </div>
                         </div>
                     </div>
