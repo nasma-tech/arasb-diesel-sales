@@ -50,7 +50,8 @@
                                                     <fieldset>
                                                         <div class="checkbox checkbox-primary checkbox-glow">
                                                             <input type="checkbox"
-                                                                   name="contactPhone[{$socialKey+1}][socialList][]"
+                                                                   disabled="disabled"
+{*                                                                   name="contactPhone[{$socialKey+1}][socialList][]"*}
                                                                    value="{$row.id}"
                                                                     {if in_array($row.id, $item->socialNetworks->pluck('id')->toArray()|default:[])}
                                                                         checked
