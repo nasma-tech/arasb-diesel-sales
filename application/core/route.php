@@ -167,11 +167,17 @@ $router->mount('/CustomerContactInformation', function () use ($router) {
     dynamicRoute($router, CustomerContactInformation::class,[
         [
             'method' => 'GET',
-            'path' => '/followUpIndex(/\d+)?',
-            'action' => 'followUpIndex'
+            'path' => '/contactDetail(/\d+)?',
+            'action' => 'contactDetail'
+        ],
+        [
+            'method' => 'GET',
+            'path' => '/contactDetailCall(/\w+)?',
+            'action' => 'contactDetailCall'
         ]
     ]);
 });
+
 $router->mount('/ContactsGroup', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactsGroup\ContactsGroup::class, [
         [
@@ -181,6 +187,7 @@ $router->mount('/ContactsGroup', function () use ($router) {
         ]
     ]);
 });
+
 $router->mount('/ContactAcquisitionSources', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactAcquisitionSources\ContactAcquisitionSources::class, [
         [
