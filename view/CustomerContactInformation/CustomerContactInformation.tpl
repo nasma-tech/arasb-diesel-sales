@@ -69,7 +69,7 @@
                                                     </span>
                                                     <div class="dropdown-menu" x-placement="bottom-start">
                                                         <a class="dropdown-item text-primary"
-                                                           href="/CustomerContactInformation/followUpIndex/{$item->id}">
+                                                           href="/CustomerContactInformation/contactDetail/{$item->id}">
                                                             <i class="bx bxs-chip mr-1 text-primary"></i> پیگیری
                                                         </a>
                                                         <a class="dropdown-item text-danger" href="#">
