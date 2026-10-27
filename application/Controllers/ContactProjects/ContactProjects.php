@@ -76,6 +76,7 @@ class ContactProjects extends ControllerScheme
         view->ui([
             'js/CustomerContactInformation/ContactProject',
             'js/CustomerContactInformation/ContactFollowUp',
+            'js/CustomerContactInformation/ContactProjectDetail',
         ], [
             'css/CustomerContactInformation/ContactInfo',
         ], [
