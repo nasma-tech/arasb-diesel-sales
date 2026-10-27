@@ -264,7 +264,13 @@ $router->mount('/ContactProjects', function () use ($router) {
     ]);
 });
 $router->mount('/ContactProjectsFollowUp', function () use ($router) {
-    dynamicRoute($router, App\Controllers\ContactProjectsFollowUp\ContactProjectsFollowUp::class);
+    dynamicRoute($router, App\Controllers\ContactProjectsFollowUp\ContactProjectsFollowUp::class, [
+        [
+            'method' => 'POST',
+            'path' => '/followUpActionSubmit',
+            'action' => 'followUpActionSubmit'
+        ]
+    ]);
 });
 $router->mount('/SocialNetworksList', function () use ($router) {
     dynamicRoute($router, App\Controllers\SocialNetworksList\SocialNetworksList::class, [

@@ -1,14 +1,19 @@
 <?php
+
 namespace App\Controllers\ContactProjectsFollowUp;
+
 use App\Controllers\scheme\ControllerScheme;
+use App\Models\ContactProjectsFollowUpActionsModel\ContactProjectsFollowUpActionsModel;
 use App\Models\ContactProjectsFollowUpModel\ContactProjectsFollowUpModel;
 
-class ContactProjectsFollowUp extends ControllerScheme{
-        const string singleName = '';
-        const string pluralName = '';
-        protected string $defaultModel = ContactProjectsFollowUpModel::class;
-        
-        public function main(){
+class ContactProjectsFollowUp extends ControllerScheme
+{
+    const string singleName = '';
+    const string pluralName = '';
+    protected string $defaultModel = ContactProjectsFollowUpModel::class;
+
+    public function main()
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -27,23 +32,25 @@ class ContactProjectsFollowUp extends ControllerScheme{
         ],
             ['vendors/css/tables/datatable/datatables.min'],
             [
-            //vars
-                ])->display('ContactProjectsFollowUp/ContactProjectsFollowUp.tpl');
+                //vars
+            ])->display('ContactProjectsFollowUp/ContactProjectsFollowUp.tpl');
     }
-    
-        public function addIndex(){
-                view->setPageTitle(self::pluralName);
-                view->setSingleName(self::singleName);
-                view->setPluralName(self::pluralName);
-                view->ui([
-                    //'js/ContactProjectsFollowUp/add-ContactProjectsFollowUp'
-                ], [],
-                    [//vars
-                    ]
-                )->display('ContactProjectsFollowUp/add-ContactProjectsFollowUp.tpl');
-            }
-            
-        public function editIndex($id){
+
+    public function addIndex()
+    {
+        view->setPageTitle(self::pluralName);
+        view->setSingleName(self::singleName);
+        view->setPluralName(self::pluralName);
+        view->ui([
+            //'js/ContactProjectsFollowUp/add-ContactProjectsFollowUp'
+        ], [],
+            [//vars
+            ]
+        )->display('ContactProjectsFollowUp/add-ContactProjectsFollowUp.tpl');
+    }
+
+    public function editIndex($id)
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -51,8 +58,8 @@ class ContactProjectsFollowUp extends ControllerScheme{
         view->setModel();
         view->ui([
             //'js/ContactProjectsFollowUp/edit-ContactProjectsFollowUp'
-        ],[], [
-        //var
+        ], [], [
+            //var
         ])->display('ContactProjectsFollowUp/edit-ContactProjectsFollowUp.tpl');
     }
 
@@ -71,10 +78,32 @@ class ContactProjectsFollowUp extends ControllerScheme{
             'user_id' => userObject()->userId
         ];
         $add = ContactProjectsFollowUpModel::query()->create($makeData);
-        if ($add){
-            $this->successCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'پیگیری با موفقیت اضافه شد');
-        }else{
-            $this->failedCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'افزودن پیگیری با خطا مواجه شد');
+        if ($add) {
+            $this->successCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}", 'پیگیری با موفقیت اضافه شد');
+        } else {
+            $this->failedCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}", 'افزودن پیگیری با خطا مواجه شد');
         }
+    }
+
+    public function followUpActionSubmit()
+    {
+        $data = $this->requestArray();
+        try {
+            $this->checkRequired([
+                'contact_project_followUp_id' => 'پیشگیری مشخص نشده است',
+                'followUp_description' => 'توضیحات اجباری است'
+            ], $data);
+            $makeData = [
+                'contact_project_followUp_id'=>$data['contact_project_followUp_id'],
+                'followUp_description'=>$data['followUp_description'],
+                'action_time'=>time(),
+                'user_id'=>userObject()->userId,
+            ];
+            ContactProjectsFollowUpActionsModel::query()->create($makeData);
+            $this->successCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'نتیجه پیگیری با موفقیت ثبت شد');
+        }catch (\Exception $exception){
+            $this->failedCallBack("/ContactProjects/ContactProjectDetail/{$data['contact_project_id']}",'برای این پیگیری قبلا نتیجه ثبت شده است');
+        }
+
     }
 }
