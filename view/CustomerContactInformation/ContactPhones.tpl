@@ -85,4 +85,7 @@
             </div>
         </div>
     </div>
+    <div class="card-footer">
+        <button class="btn btn-sm btn-primary float-right">افزودن شماره تماس</button>
+    </div>
 </div>
