@@ -76,11 +76,11 @@ class CustomerContactInformation extends ControllerScheme
         )->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
     }
 
-    public function followUpIndex($id = null)
+    public function contactDetail($id = null)
     {
         $contactData = CustomerContactInformationModel::with([
             'projectData'
-        ])->where('user_id',userObject()->userId)->findOrFail($id);
+        ])->where('user_id', userObject()->userId)->findOrFail($id);
 
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
@@ -106,56 +106,62 @@ class CustomerContactInformation extends ControllerScheme
                 'socialNetworks'
             ])->where('contact_id', $contactData->id)->get(),
             'socialNetWorksList' => SocialNetworksListModel::query()->get(),
-            'toDayFollowUpCount' => (function () use ($contactData) {
-                $get = $contactData->projectData;
-                $count = 0;
-                foreach ($get as $item) {
-                    $followUp = $item->followUpData()->where('next_followUp_date', '=', strtotime('toDay'))->get()->toArray();
-                    foreach ($followUp as $row) {
-                        $count++;
-                    }
-                }
-                return $count;
-            })(),
-            'toDayFollowUpActionCount' => (function () use ($contactData) {
-                $get = $contactData->projectData;
-                $count = 0;
-                foreach ($get as $item) {
-                    foreach ($item->followUpData as $row) {
-                        $actions = $row->followUpActions()->where('action_time', '>', strtotime('toDay'))->get()->toArray();
-                        if (count($actions) > 0) {
-                            $count++;
-                        }
-                    }
-                }
-                return $count;
-            })(),
-            'pastFollowUpCount' => (function () use ($contactData) {
-                $get = $contactData->projectData;
-                $count = 0;
-                foreach ($get as $item) {
-                    $followUp = $item->followUpData()->where('next_followUp_date', '<', strtotime('toDay'))->get()->toArray();
-                    foreach ($followUp as $row) {
-                        $count++;
-                    }
-                }
-                return $count;
-            })(),
-            'nextFollowUpCount' => (function () use ($contactData) {
-                $get = $contactData->projectData;
-                $count = 0;
-                foreach ($get as $item) {
-                    $followUp = $item->followUpData()->where('next_followUp_date', '>', strtotime('toDay'))->get()->toArray();
-                    foreach ($followUp as $row) {
-                        $count++;
-                    }
-                }
-                return $count;
-            })()
-        ])->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
+        ])->display('CustomerContactInformation/contactDetail.tpl');
     }
 
-    private function generateCustomerCode() :int
+    public function contactDetailCall($phoneNumber)
+    {
+        switch (strlen($phoneNumber)) {
+            case 14:
+                $phoneNumber = '0' . substr($phoneNumber, 4);
+                break;
+            case 13:
+                $phoneNumber = '0' . substr($phoneNumber, 3);
+                break;
+            case 12:
+                $phoneNumber = '0' . substr($phoneNumber, 2);
+                break;
+            case 10:
+                $phoneNumber = '0' . $phoneNumber;
+                break;
+        }
+        $phoneSearch = ContactPhonesModel::query()->where('phone_number', $phoneNumber)->first();
+        try {
+            $contactData = CustomerContactInformationModel::with([
+                'projectData'
+            ])->where('user_id', userObject()->userId)->findOrFail($phoneSearch->contact_id);
+            view->setPageTitle(self::pluralName);
+            view->setSingleName(self::singleName);
+            view->setPluralName(self::pluralName);
+            view->ui([
+                'js/CustomerContactInformation/add-CustomerContactInformation',
+                'js/CustomerContactInformation/ContactInfo',
+                'js/CustomerContactInformation/ContactPhones',
+                'js/CustomerContactInformation/ContactProject',
+                'js/CustomerContactInformation/ContactFollowUp',
+            ], [
+                'css/CustomerContactInformation/ContactInfo',
+                'css/CustomerContactInformation/followUpStyle',
+            ], [
+                'contactData' => $contactData,
+                'IndustryType' => IndustryTypeModel::query()->get(),
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+                'ContactGroups' => ContactsGroupModel::query()->get(),
+                'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
+                'states' => StateModel::query()->get(),
+                'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
+                'contactPhones' => ContactPhonesModel::query()->with([
+                    'socialNetworks'
+                ])->where('contact_id', $contactData->id)->get(),
+                'socialNetWorksList' => SocialNetworksListModel::query()->get(),
+            ])->display('CustomerContactInformation/contactDetail.tpl');
+        } catch (\Exception $exception) {
+            redirect('/CustomerContactInformation/addIndex');
+        }
+
+    }
+
+    private function generateCustomerCode(): int
     {
         do {
             $code = random_int(100000, 999999);
@@ -166,7 +172,6 @@ class CustomerContactInformation extends ControllerScheme
 
     private function addContactInfo()
     {
-        $_ENV['APP_DEBUG'] = 1;
         $data = $this->requestArray();
         $this->checkRequired([
             'first_name' => 'نام',
@@ -180,7 +185,7 @@ class CustomerContactInformation extends ControllerScheme
             'last_name' => $data['last_name'],
             'contact_group_id' => $data['contact_group_id'],
             'contact_acquisition_source_id' => $data['contact_acquisition_source_id'],
-            'contact_code'=>$this->generateCustomerCode()
+            'contact_code' => $this->generateCustomerCode()
         ];
         if ($data['contact_type'] == 1) {
             $this->checkRequired([
@@ -193,7 +198,7 @@ class CustomerContactInformation extends ControllerScheme
                 'city_id' => $data['city_id'],
                 'user_id' => userObject()->userId,
             ];
-            $mergeData = array_merge($subscriberData,$dataForm);
+            $mergeData = array_merge($subscriberData, $dataForm);
             return CustomerContactInformationModel::query()->create($mergeData)->id;
         } elseif ($data['contact_type'] == 2) {
             $this->checkRequired([
@@ -238,10 +243,10 @@ class CustomerContactInformation extends ControllerScheme
         }
     }
 
-    private function createProjectCode(int $contactId)
+    public function createProjectCode(int $contactId)
     {
         $contactProject = ContactProjectsModel::query()->where('contact_id', $contactId)->count();
-        return jdate("Y") . $contactId . (($contactProject == 0) ? 1 : $contactProject);
+        return jdate('Y') . $contactId . ($contactProject + 1);
     }
 
     private function addContactProject(int $contactId)
