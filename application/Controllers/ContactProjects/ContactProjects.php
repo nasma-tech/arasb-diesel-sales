@@ -118,8 +118,10 @@ class ContactProjects extends ControllerScheme
                 }
             }
         }
-        $this->successCallBack("/CustomerContactInformation/contactDetail/{$data['contact_id']}",'پروژه با موفقیت اضافه شد');
+        if (!$addProject) {
+            $this->successCallBack("/CustomerContactInformation/contactDetail/{$data['contact_id']}", 'پروژه با موفقیت اضافه شد');
+        } else {
+            $this->failedCallBack("/CustomerContactInformation/contactDetail/{$data['contact_id']}", 'افزودن پروژه با خطا مواجه شد');
+        }
     }
-
-
 }
