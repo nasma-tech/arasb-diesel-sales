@@ -78,35 +78,39 @@ class CustomerContactInformation extends ControllerScheme
 
     public function contactDetail($id = null)
     {
-        $contactData = CustomerContactInformationModel::with([
-            'projectData'
-        ])->where('user_id', userObject()->userId)->findOrFail($id);
+        try {
+            $contactData = CustomerContactInformationModel::with([
+                'projectData'
+            ])->where('user_id', userObject()->userId)->findOrFail($id);
+            view->setPageTitle(self::pluralName);
+            view->setSingleName(self::singleName);
+            view->setPluralName(self::pluralName);
+            view->ui([
+                'js/CustomerContactInformation/add-CustomerContactInformation',
+                'js/CustomerContactInformation/ContactInfo',
+                'js/CustomerContactInformation/ContactPhones',
+                'js/CustomerContactInformation/ContactProject',
+                'js/CustomerContactInformation/ContactFollowUp',
+            ], [
+                'css/CustomerContactInformation/ContactInfo',
+                'css/CustomerContactInformation/followUpStyle',
+            ], [
+                'contactData' => $contactData,
+                'IndustryType' => IndustryTypeModel::query()->get(),
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+                'ContactGroups' => ContactsGroupModel::query()->get(),
+                'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
+                'states' => StateModel::query()->get(),
+                'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
+                'contactPhones' => ContactPhonesModel::query()->with([
+                    'socialNetworks'
+                ])->where('contact_id', $contactData->id)->get(),
+                'socialNetWorksList' => SocialNetworksListModel::query()->get(),
+            ])->display('CustomerContactInformation/contactDetail.tpl');
+        }catch (\Exception $exception){
+            handleHttpErrorView::handle(404,'مشتری یافت نشد');
+        }
 
-        view->setPageTitle(self::pluralName);
-        view->setSingleName(self::singleName);
-        view->setPluralName(self::pluralName);
-        view->ui([
-            'js/CustomerContactInformation/add-CustomerContactInformation',
-            'js/CustomerContactInformation/ContactInfo',
-            'js/CustomerContactInformation/ContactPhones',
-            'js/CustomerContactInformation/ContactProject',
-            'js/CustomerContactInformation/ContactFollowUp',
-        ], [
-            'css/CustomerContactInformation/ContactInfo',
-            'css/CustomerContactInformation/followUpStyle',
-        ], [
-            'contactData' => $contactData,
-            'IndustryType' => IndustryTypeModel::query()->get(),
-            'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
-            'ContactGroups' => ContactsGroupModel::query()->get(),
-            'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
-            'states' => StateModel::query()->get(),
-            'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
-            'contactPhones' => ContactPhonesModel::query()->with([
-                'socialNetworks'
-            ])->where('contact_id', $contactData->id)->get(),
-            'socialNetWorksList' => SocialNetworksListModel::query()->get(),
-        ])->display('CustomerContactInformation/contactDetail.tpl');
     }
 
     public function contactDetailCall($phoneNumber)
@@ -202,7 +206,7 @@ class CustomerContactInformation extends ControllerScheme
             return CustomerContactInformationModel::query()->create($mergeData)->id;
         } elseif ($data['contact_type'] == 2) {
             $this->checkRequired([
-                'national_ID'
+                'national_ID'=>'شناسه ملی'
             ], $data);
             $dataForm = [
                 'national_ID' => $data['national_ID'],
