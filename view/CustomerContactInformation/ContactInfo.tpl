@@ -112,4 +112,10 @@
             </div>
         </div>
     </div>
+
+    {if $smarty.session.roleId == 0 || $smarty.session.user_id == $contactData.userId}
+        <div class="card-footer">
+            <button class="btn btn-sm btn-primary float-right">ویرایش اطلاعات اولیه</button>
+        </div>
+    {/if}
 </div>
