@@ -6,6 +6,9 @@ use App\Controllers\CustomerContactInformation\CustomerContactInformation;
 use App\Controllers\scheme\ControllerScheme;
 use App\Models\ContactProjectRequestsModel\ContactProjectRequestsModel;
 use App\Models\ContactProjectsModel\ContactProjectsModel;
+use App\Models\ContactsGroupModel\ContactsGroupModel;
+use App\Models\FollowUpActionsTitleModel\FollowUpActionsTitleModel;
+use App\Models\IndustryTypeModel\IndustryTypeModel;
 
 class ContactProjects extends ControllerScheme
 {
@@ -62,6 +65,24 @@ class ContactProjects extends ControllerScheme
         ], [], [
             //var
         ])->display('ContactProjects/edit-ContactProjects.tpl');
+    }
+
+    public function ContactProjectDetail($id)
+    {
+        $_ENV['APP_DEBUG'] = 1;
+        view->setPageTitle(self::pluralName);
+        view->setSingleName(self::singleName);
+        view->setPluralName(self::pluralName);
+        view->setModel(ContactProjectsModel::query()->find($id));
+        view->ui([
+            'js/CustomerContactInformation/ContactProject',
+            'js/CustomerContactInformation/ContactFollowUp',
+        ], [
+            'css/CustomerContactInformation/ContactInfo',
+        ], [
+            'IndustryType' => IndustryTypeModel::query()->get(),
+            'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+        ])->display('CustomerContactInformation/ContactProjectDetail.tpl');
     }
 
     public function add()
