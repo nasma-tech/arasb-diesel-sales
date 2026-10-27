@@ -150,7 +150,7 @@ $(function () {
         }
     })
     let locationUrl = window.location.href;
-    if (locationUrl.search('followUp') < 0) {
+    if (locationUrl.search('contactDetail') < 0) {
         $(".selectContactTypeButton")[0].click()
     }
 
