@@ -2,7 +2,9 @@
 
 namespace App\Models\ContactProjectsFollowUpActionsModel;
 
+use App\Models\UserModel\UserModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContactProjectsFollowUpActionsModel extends Model
@@ -20,5 +22,10 @@ class ContactProjectsFollowUpActionsModel extends Model
         'user_id',
         'deleted_at'
     ];
+
+    public function userData(): HasOne
+    {
+        return $this->hasOne(UserModel::class,'id','user_id');
+    }
 
 }
