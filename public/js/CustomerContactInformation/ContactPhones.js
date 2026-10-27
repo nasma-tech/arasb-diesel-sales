@@ -14,10 +14,10 @@ $(function () {
         return `
             <tr>
                 <td class="border">
-                    <select id="contact_phone_label_id_${counter}" data-count="${counter}" name="contactPhone[${counter}][contact_phone_label_id]" class="contact_phone_label_id"></select>
+                    <select id="contact_phone_label_id_${counter}" required="required" data-count="${counter}" name="contactPhone[${counter}][contact_phone_label_id]" class="contact_phone_label_id"></select>
                 </td>
                 <td class="border">
-                    <input class="form-control phone_number" type="text" dir="ltr" data-count="${counter}" id="phone_number_${counter}" name="contactPhone[${counter}][phone_number]">
+                    <input class="form-control phone_number" required="required" type="text" dir="ltr" data-count="${counter}" id="phone_number_${counter}" name="contactPhone[${counter}][phone_number]">
                 </td>
                 <td class="border">
                     <div class="dropup">
