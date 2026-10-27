@@ -1,12 +1,18 @@
 <?php
+
 namespace App\Controllers\ContactPhones;
+
 use App\Controllers\scheme\ControllerScheme;
-class ContactPhones extends ControllerScheme{
-        const string singleName = '';
-        const string pluralName = '';
-        protected string $defaultModel = ContactPhonesModel::class;
-        
-        public function main(){
+use App\Models\ContactPhonesModel\ContactPhonesModel;
+
+class ContactPhones extends ControllerScheme
+{
+    const string singleName = '';
+    const string pluralName = '';
+    protected string $defaultModel = ContactPhonesModel::class;
+
+    public function main()
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -25,23 +31,25 @@ class ContactPhones extends ControllerScheme{
         ],
             ['vendors/css/tables/datatable/datatables.min'],
             [
-            //vars
-                ])->display('ContactPhones/ContactPhones.tpl');
+                //vars
+            ])->display('ContactPhones/ContactPhones.tpl');
     }
-    
-        public function addIndex(){
-                view->setPageTitle(self::pluralName);
-                view->setSingleName(self::singleName);
-                view->setPluralName(self::pluralName);
-                view->ui([
-                    //'js/ContactPhones/add-ContactPhones'
-                ], [],
-                    [//vars
-                    ]
-                )->display('ContactPhones/add-ContactPhones.tpl');
-            }
-            
-        public function editIndex($id){
+
+    public function addIndex()
+    {
+        view->setPageTitle(self::pluralName);
+        view->setSingleName(self::singleName);
+        view->setPluralName(self::pluralName);
+        view->ui([
+            //'js/ContactPhones/add-ContactPhones'
+        ], [],
+            [//vars
+            ]
+        )->display('ContactPhones/add-ContactPhones.tpl');
+    }
+
+    public function editIndex($id)
+    {
         view->setPageTitle(self::pluralName);
         view->setSingleName(self::singleName);
         view->setPluralName(self::pluralName);
@@ -49,8 +57,34 @@ class ContactPhones extends ControllerScheme{
         view->setModel();
         view->ui([
             //'js/ContactPhones/edit-ContactPhones'
-        ],[], [
-        //var
+        ], [], [
+            //var
         ])->display('ContactPhones/edit-ContactPhones.tpl');
+    }
+
+    public function add()
+    {
+        $data = $this->requestArray('contactPhone', []);
+        if (!empty($data)) {
+            foreach ($data as $item) {
+                $this->checkRequired([
+                    'contact_phone_label_id' => 'عنوان تماس',
+                    'phone_number' => 'شماره تماس',
+                ], $item);
+                $socialList = $item['socialList'] ?? [];
+                unset($item['socialList']);
+                $item['contact_id'] = $this->requestArray()['contact_id'];
+                $item['user_id'] = userObject()->userId;
+                $addPhoneContact = ContactPhonesModel::query()->create($item);
+                if (!empty($socialList)) {
+                    $addPhoneContact->socialNetworks()->attach($socialList);
+                }
+            }
+            $this->successCallBack("/CustomerContactInformation/contactDetail/{$this->requestArray()['contact_id']}", 'شماره تماس با موفقیت اضافه شد');
+        } else {
+            $this->failedCallBack("/CustomerContactInformation/contactDetail/{$this->requestArray()['contact_id']}", 'شماره ای جهت افزودن یافت نشد');
+
+        }
+
     }
 }
