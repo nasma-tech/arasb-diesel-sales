@@ -40,9 +40,20 @@ $(function () {
                     <input class="form-control requestAmount" dir="ltr" type="text" id="request_amount" data-count="${counter}" name="projectRequest[${counter}][request_amount]">
                 </td>
                 <td class="border">
-                    <button class="btn btn-xs btn-icon btn-danger removeRequestRow">
-                        <i class="bx bx-trash"></i>
-                    </button>
+                    <div class="dropup">
+                        <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                        </span>
+                        <div class="dropdown-menu" x-placement="bottom-start">
+                            <a class="dropdown-item text-danger removeRequestRow" data-count="1">
+                                <i class="bx bx-trash text-danger mr-1"></i>
+                                حذف
+                            </a>
+                            <a class="dropdown-item text-primary inquiryRequestRow" data-count="1">
+                                <i class="bx bx-search text-primary mr-1"></i>
+                                استعلام
+                            </a>
+                        </div>
+                    </div>
                 </td>
             </tr>
         `
