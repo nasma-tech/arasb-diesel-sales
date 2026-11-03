@@ -5,6 +5,7 @@ namespace App\Controllers\CustomerContactInformation;
 use App\Controllers\scheme\ControllerScheme;
 use App\Models\CarsBrandModel\CarsBrandModel;
 use App\Models\CarsGroupModel\CarsGroupModel;
+use App\Models\CityModel\CityModel;
 use App\Models\CompaniesModel\CompaniesModel;
 use App\Models\ContactAcquisitionSourcesModel\ContactAcquisitionSourcesModel;
 use App\Models\ContactPhonesModel\ContactPhonesModel;
@@ -15,6 +16,7 @@ use App\Models\ContactsGroupModel\ContactsGroupModel;
 use App\Models\CustomerContactInformationModel\CustomerContactInformationModel;
 use App\Models\FollowUpActionsTitleModel\FollowUpActionsTitleModel;
 use App\Models\IndustryTypeModel\IndustryTypeModel;
+use App\Models\SocialNetworksListModel\SocialNetworksListModel;
 use App\Models\StateModel\StateModel;
 use InvalidArgumentException;
 use Packages\View\handleHttpErrorView;
@@ -43,7 +45,10 @@ class CustomerContactInformation extends ControllerScheme
             'vendors/js/tables/datatable/buttons.colVis.min',
             //'js/CustomerContactInformation/CustomerContactInformation'
         ],
-            ['vendors/css/tables/datatable/datatables.min'],
+            [
+                'vendors/css/tables/datatable/datatables.min',
+                'css/CustomerContactInformation/CustomerContactInformation'
+            ],
             [
                 'list' => CustomerContactInformationModel::query()->orderByDesc('id')->get()
             ])->display('CustomerContactInformation/CustomerContactInformation.tpl');
@@ -60,28 +65,114 @@ class CustomerContactInformation extends ControllerScheme
             'js/CustomerContactInformation/ContactPhones',
             'js/CustomerContactInformation/ContactProject',
             'js/CustomerContactInformation/ContactFollowUp',
-        ], [],
+        ], [
+            'css/CustomerContactInformation/ContactInfo',
+            'css/CustomerContactInformation/followUpStyle',
+        ],
             [
                 'IndustryType' => IndustryTypeModel::query()->get(),
-                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get()
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
             ]
         )->display('CustomerContactInformation/add-CustomerContactInformation.tpl');
     }
 
-    public function editIndex($id)
+    public function contactDetail($id = null)
     {
-        view->setPageTitle(self::pluralName);
-        view->setSingleName(self::singleName);
-        view->setPluralName(self::pluralName);
-        //name this model
-        view->setModel();
-        view->ui([
-            //'js/CustomerContactInformation/edit-CustomerContactInformation'
-        ], [], [
-            //var
-        ])->display('CustomerContactInformation/edit-CustomerContactInformation.tpl');
+        try {
+            $contactData = CustomerContactInformationModel::with([
+                'projectData'
+            ])->where('user_id', userObject()->userId)->findOrFail($id);
+            view->setPageTitle(self::pluralName);
+            view->setSingleName(self::singleName);
+            view->setPluralName(self::pluralName);
+            view->ui([
+                'js/CustomerContactInformation/add-CustomerContactInformation',
+                'js/CustomerContactInformation/ContactInfo',
+                'js/CustomerContactInformation/ContactPhones',
+                'js/CustomerContactInformation/ContactProject',
+                'js/CustomerContactInformation/ContactFollowUp',
+            ], [
+                'css/CustomerContactInformation/ContactInfo',
+                'css/CustomerContactInformation/followUpStyle',
+            ], [
+                'contactData' => $contactData,
+                'IndustryType' => IndustryTypeModel::query()->get(),
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+                'ContactGroups' => ContactsGroupModel::query()->get(),
+                'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
+                'states' => StateModel::query()->get(),
+                'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
+                'contactPhones' => ContactPhonesModel::query()->with([
+                    'socialNetworks'
+                ])->where('contact_id', $contactData->id)->get(),
+                'socialNetWorksList' => SocialNetworksListModel::query()->get(),
+            ])->display('CustomerContactInformation/contactDetail.tpl');
+        }catch (\Exception $exception){
+            handleHttpErrorView::handle(404,'مشتری یافت نشد');
+        }
+
     }
 
+    public function contactDetailCall($phoneNumber)
+    {
+        switch (strlen($phoneNumber)) {
+            case 14:
+                $phoneNumber = '0' . substr($phoneNumber, 4);
+                break;
+            case 13:
+                $phoneNumber = '0' . substr($phoneNumber, 3);
+                break;
+            case 12:
+                $phoneNumber = '0' . substr($phoneNumber, 2);
+                break;
+            case 10:
+                $phoneNumber = '0' . $phoneNumber;
+                break;
+        }
+        $phoneSearch = ContactPhonesModel::query()->where('phone_number', $phoneNumber)->first();
+        try {
+            $contactData = CustomerContactInformationModel::with([
+                'projectData'
+            ])->where('user_id', userObject()->userId)->findOrFail($phoneSearch->contact_id);
+            view->setPageTitle(self::pluralName);
+            view->setSingleName(self::singleName);
+            view->setPluralName(self::pluralName);
+            view->ui([
+                'js/CustomerContactInformation/add-CustomerContactInformation',
+                'js/CustomerContactInformation/ContactInfo',
+                'js/CustomerContactInformation/ContactPhones',
+                'js/CustomerContactInformation/ContactProject',
+                'js/CustomerContactInformation/ContactFollowUp',
+            ], [
+                'css/CustomerContactInformation/ContactInfo',
+                'css/CustomerContactInformation/followUpStyle',
+            ], [
+                'contactData' => $contactData,
+                'IndustryType' => IndustryTypeModel::query()->get(),
+                'FollowUpActionsTitle' => FollowUpActionsTitleModel::query()->get(),
+                'ContactGroups' => ContactsGroupModel::query()->get(),
+                'ContactAcquisitionSources' => ContactAcquisitionSourcesModel::query()->get(),
+                'states' => StateModel::query()->get(),
+                'cities' => CityModel::query()->where('state_id', $contactData->state_id)->get(),
+                'contactPhones' => ContactPhonesModel::query()->with([
+                    'socialNetworks'
+                ])->where('contact_id', $contactData->id)->get(),
+                'socialNetWorksList' => SocialNetworksListModel::query()->get(),
+            ])->display('CustomerContactInformation/contactDetail.tpl');
+        } catch (\Exception $exception) {
+            redirect('/CustomerContactInformation/addIndex');
+        }
+
+    }
+
+    private function generateCustomerCode(): int
+    {
+        do {
+            $code = random_int(100000, 999999);
+            $exists = CustomerContactInformationModel::query()->where('contact_code', $code)->exists();
+        } while ($exists);
+        return $code;
+    }
 
     private function addContactInfo()
     {
@@ -98,6 +189,7 @@ class CustomerContactInformation extends ControllerScheme
             'last_name' => $data['last_name'],
             'contact_group_id' => $data['contact_group_id'],
             'contact_acquisition_source_id' => $data['contact_acquisition_source_id'],
+            'contact_code' => $this->generateCustomerCode()
         ];
         if ($data['contact_type'] == 1) {
             $this->checkRequired([
@@ -110,11 +202,11 @@ class CustomerContactInformation extends ControllerScheme
                 'city_id' => $data['city_id'],
                 'user_id' => userObject()->userId,
             ];
-            $mergeData = array_merge($dataForm, $data);
+            $mergeData = array_merge($subscriberData, $dataForm);
             return CustomerContactInformationModel::query()->create($mergeData)->id;
         } elseif ($data['contact_type'] == 2) {
             $this->checkRequired([
-                'national_ID'
+                'national_ID'=>'شناسه ملی'
             ], $data);
             $dataForm = [
                 'national_ID' => $data['national_ID'],
@@ -136,46 +228,49 @@ class CustomerContactInformation extends ControllerScheme
         }
     }
 
-    private function addContactPhones($contactId): void
+    private function addContactPhonesAndSocialNetWorks($contactId): void
     {
-        if (isset($this->requestArray()['contactPhone'])) {
-            $data = $this->requestArray()['contactPhone'];
-            foreach ($data as $item) {
-                $this->checkRequired([
-                    'contact_phone_label_id'=>'عنوان تماس',
-                    'phone_number'=>'شمارخ تماس',
-                ], $item);
-                $item['contact_id'] = $contactId;
-                $item['user_id'] = userObject()->userId;
-                ContactPhonesModel::query()->create($item);
+        $data = $this->requestArray('contactPhone', []);
+        foreach ($data as $item) {
+            $this->checkRequired([
+                'contact_phone_label_id' => 'عنوان تماس',
+                'phone_number' => 'شماره تماس',
+            ], $item);
+            $socialList = $item['socialList'] ?? [];
+            unset($item['socialList']);
+            $item['contact_id'] = $contactId;
+            $item['user_id'] = userObject()->userId;
+            $addPhoneContact = ContactPhonesModel::query()->create($item);
+            if (!empty($socialList)) {
+                $addPhoneContact->socialNetworks()->attach($socialList);
             }
         }
     }
 
-    private function createProjectCode(int $contactId)
+    public function createProjectCode(int $contactId)
     {
         $contactProject = ContactProjectsModel::query()->where('contact_id', $contactId)->count();
-        return jdate("Y") . $contactId . (($contactProject == 0) ? 1 : $contactProject);
+        return jdate('Y') . $contactId . ($contactProject + 1);
     }
 
     private function addContactProject(int $contactId)
     {
         $data = $this->requestArray();
+        $this->checkRequired([
+            'payment_type' => 'نوع پرداخت',
+            'purchase_type' => 'نوع خرید',
+            'industry_type_id' => 'نوع صنعت',
+        ], $data);
+        $makeData = [
+            'contact_id' => $contactId,
+            'project_code' => $this->createProjectCode($contactId),
+            'payment_type' => $data['payment_type'],
+            'purchase_type' => $data['purchase_type'],
+            'industry_type_id' => $data['industry_type_id'],
+            'user_id' => userObject()->userId,
+        ];
+        $addProject = ContactProjectsModel::query()->create($makeData);
         if (isset($data['projectRequest'])) {
-            $this->checkRequired([
-                'payment_type'=>'نوع پرداخت',
-                'purchase_type'=>'نوع خرید',
-                'industry_type_id'=>'نوع صنعت',
-            ], $data);
-            $makeData = [
-                'contact_id' => $contactId,
-                'project_code' => $this->createProjectCode($contactId),
-                'payment_type' => $data['payment_type'],
-                'purchase_type' => $data['purchase_type'],
-                'industry_type_id' => $data['industry_type_id'],
-                'user_id' => userObject()->userId,
-            ];
-            $addProject = ContactProjectsModel::query()->create($makeData);
             if ($addProject) {
                 foreach ($data['projectRequest'] as $item) {
                     ContactProjectRequestsModel::query()->create([
@@ -193,7 +288,7 @@ class CustomerContactInformation extends ControllerScheme
                 return false;
             }
         } else {
-            return false;
+            return $addProject->id;
         }
     }
 
@@ -201,7 +296,7 @@ class CustomerContactInformation extends ControllerScheme
     {
         $data = $this->requestArray();
         $this->checkRequired([
-            'FollowUp_action_id'=>'عنوان پیگیری بعد'
+            'FollowUp_action_id' => 'عنوان پیگیری بعد'
         ], $data);
         $makeData = [
             'contact_project_id' => $contactProjectId,
@@ -216,7 +311,7 @@ class CustomerContactInformation extends ControllerScheme
     public function add()
     {
         $addContact = $this->addContactInfo();
-        $this->addContactPhones($addContact);
+        $this->addContactPhonesAndSocialNetWorks($addContact);
         $addContactProject = $this->addContactProject($addContact);
         $this->addFollowUp($addContactProject);
         $this->successCallBack('/CustomerContactInformation/main');

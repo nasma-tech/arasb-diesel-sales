@@ -1,7 +1,6 @@
 {include 'sections/header.tpl'}
 {include 'sections/top-bar.tpl'}
 {include 'sections/side-menu.tpl'}
-
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -23,6 +22,7 @@
                                     <thead class="thead-dark">
                                     <tr>
                                         <th class="border">شناسه</th>
+                                        <th class="border">کد مشتری</th>
                                         <th class="border">نوع مشتری</th>
                                         <th class="border">مخاطب</th>
                                         <th class="border">استان</th>
@@ -35,7 +35,10 @@
                                     <tbody>
                                     {foreach $list as $item}
                                         <tr>
-                                            <td class="border">{$item->id}</td>
+                                            <td class="border text-center">{$item.id}</td>
+                                            <td class="border text-center">
+                                                <kbd class="cc-code-badge">{$item.contact_code}</kbd>
+                                            </td>
                                             <td class="border">
                                                 {if $item->contact_type == 1}
                                                     حقیقی
@@ -44,19 +47,19 @@
                                                 {/if}
                                             </td>
                                             <td class="border">
-                                                {$item->first_name} {$item->last_name}
+                                                {$item->first_name|default:''} {$item->last_name|default:''}
                                             </td>
                                             <td class="border">
-                                                {$item->stateDate->title}
+                                                {$item->stateDate->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->cityDate->title}
+                                                {$item->cityDate->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->contactGroupData->title}
+                                                {$item->contactGroupData->title|default:'-'}
                                             </td>
                                             <td class="border">
-                                                {$item->contactAcquisitionSource->title}
+                                                {$item->contactAcquisitionSource->title|default:'-'}
                                             </td>
                                             <td class="border">
                                                 <div class="dropup">
@@ -65,11 +68,9 @@
                                                           aria-expanded="false" role="menu">
                                                     </span>
                                                     <div class="dropdown-menu" x-placement="bottom-start">
-                                                        <a class="dropdown-item text-warning" href="#">
-                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> پیگیری
-                                                        </a>
-                                                        <a class="dropdown-item text-warning" href="#">
-                                                            <i class="bx bx-edit-alt mr-1 text-warning"></i> ویرایش
+                                                        <a class="dropdown-item text-primary"
+                                                           href="/CustomerContactInformation/contactDetail/{$item->id}">
+                                                            <i class="bx bxs-chip mr-1 text-primary"></i> پیگیری
                                                         </a>
                                                         <a class="dropdown-item text-danger" href="#">
                                                             <i class="bx bx-trash text-danger mr-1"></i>

@@ -24,21 +24,21 @@ $(function () {
         return `
             <div class="col-md-4">
             <label for="first_name">نام</label>
-            <input class="form-control" id="first_name" name="first_name">
+            <input class="form-control" required="required" id="first_name" name="first_name">
         </div>
         <div class="col-md-4">
             <label for="last_name">نام خانوادگی</label>
-            <input class="form-control" id="last_name" name="last_name">
+            <input class="form-control" required="required" id="last_name" name="last_name">
         </div>
         <div class="col-md-4">
             <label for="contact_group_id">گروه مشتری</label>
-            <select class="form-control select2" id="contact_group_id" name="contact_group_id">
+            <select class="form-control select2" required="required" id="contact_group_id" name="contact_group_id">
                 <option selected disabled>یک مورد را انتخاب کنید</option>
             </select>
         </div>
         <div class="col-md-4 mt-2">
             <label for="contact_acquisition_source_id">نحوه آشنایی</label>
-            <select class="form-control select2" id="contact_acquisition_source_id" name="contact_acquisition_source_id">
+            <select class="form-control select2" required="required" id="contact_acquisition_source_id" name="contact_acquisition_source_id">
                 <option selected disabled>یک مورد را انتخاب کنید</option>
             </select>
         </div>
@@ -53,26 +53,25 @@ $(function () {
         </div>
         <div class="col-md-4 mt-2">
             <label for="state_id">استان محل سکونت</label>
-            <select class="form-control select2" id="state_id" name="state_id">
+            <select class="form-control select2" required="required" id="state_id" name="state_id">
                 <option selected disabled>یک استان را انتخاب کنید</option>
             </select>
         </div>
         <div class="col-md-4 mt-2">
             <label for="city_id">شهر محل سکونت</label>
-            <select class="form-control select2" disabled id="city_id" name="city_id"></select>
+            <select class="form-control select2" required="required" disabled id="city_id" name="city_id"></select>
         </div>
       `
     }
-
     const legalForm = () => {
         return `
             ${subscriberForm()}
             <div class="col-md-4 mt-2">
                 <label for="national_ID">شناسه ملی</label>
-                <input class="form-control" id="national_ID" name="national_ID">
+                <input class="form-control" required="required" id="national_ID" name="national_ID">
             </div>
             <div class="col-md-4 mt-2">
-                <label for="">کد اقتصادی</label>
+                <label for="economic_code">کد اقتصادی</label>
                 <input class="form-control" id="economic_code" name="economic_code">
             </div>
             <div class="col-md-4 mt-2">
@@ -138,6 +137,21 @@ $(function () {
             }
         })
     })
-    $(".selectContactTypeButton")[0].click()
+
+
+    //follow up
+    $("#state_id").getOptions({
+        urlAddress: "/cities/getFilterCities", callback: result => {
+            $("#city_id").empty();
+            $.each(result, function (key, item) {
+                $("#city_id").append(`<option value="${item.id}">${item.title}</option>`).attr('disabled', false)
+            })
+            $("#city_id").select2()
+        }
+    })
+    let locationUrl = window.location.href;
+    if (locationUrl.search('contactDetail') < 0) {
+        $(".selectContactTypeButton")[0].click()
+    }
 
 })

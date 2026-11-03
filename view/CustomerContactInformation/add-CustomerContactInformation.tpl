@@ -10,7 +10,7 @@
             <div class="col-md-12">
                 <div class="card shadow">
                     <div class="card-header">
-                        <h4 class="card-title">لیست {$pluralName}</h4>
+                        <h4 class="card-title">{$singleName}</h4>
                         <div class="heading-elements">
                             {$buttonHelper->refreshAndBackButton()}
                         </div>
@@ -18,25 +18,38 @@
                 </div>
             </div>
         </div>
-        <form action="/CustomerContactInformation/add" method="post">
-            <div class="row">
-                {include 'CustomerContactInformation/ContactInfo.tpl'}
-                {include 'CustomerContactInformation/ContactPhones.tpl'}
-                {include 'CustomerContactInformation/ContactProject.tpl'}
-                {include 'CustomerContactInformation/ContactProjectFollowUp.tpl'}
-                <div class="col-md-12">
-                    <div class="card shadow mt-1 mb-5">
-                        <div class="card-content">
-                            <div class="card-body pb-3">
-                                <button class="btn btn-sm btn-primary float-right">ثبت
-                                    مرکز تماس
-                                </button>
+
+        <div class="row" style="margin-top: 3px">
+            <div class="col-md-12">
+                <form action="/CustomerContactInformation/add" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {include 'CustomerContactInformation/ContactInfo.tpl'}
+                        </div>
+                        <div class="col-md-6 pl-0">
+                            {include 'CustomerContactInformation/ContactPhones.tpl'}
+                        </div>
+                        <div class="col-md-6">
+                            {include 'CustomerContactInformation/ContactProject.tpl'}
+                        </div>
+                        <div class="col-md-6 pl-0">
+                            {include 'CustomerContactInformation/ContactProjectFollowUp.tpl'}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card shadow mt-1 mb-5">
+                                <div class="card-content">
+                                    <div class="card-body pb-3">
+                                        <button class="btn btn-sm btn-primary float-right">ثبت
+                                            مرکز تماس
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

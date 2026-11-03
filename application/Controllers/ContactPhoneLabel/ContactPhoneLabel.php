@@ -67,7 +67,8 @@ class ContactPhoneLabel extends ControllerScheme
         echo json_encode(array_map(function ($item){
             return [
                 'id'=>$item['id'],
-                'title'=>$item['type']
+                'title'=>$item['type'],
+                'hasSocial'=>$item['has_social_network']
             ];
         },ContactPhoneLabelModel::query()->get()->toArray()),JSON_UNESCAPED_UNICODE);
     }
