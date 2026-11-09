@@ -101,6 +101,7 @@ class dashboard
                 'iranMap/cssMap/mapStyle',
                 'vendors/css/tables/datatable/datatables.min',
                 'vendors/css/charts/apexcharts4.min',
+                'css/dashboard/dashboard',
             ],
             [
                 'user' => UserModel::query()->find(userObject()->userId),

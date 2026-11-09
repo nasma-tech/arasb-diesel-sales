@@ -1,0 +1,245 @@
+/* ==========================================
+   Corporate Select2 | RTL
+   ========================================== */
+
+.select2 + .select2-container {
+    width: 100% !important;
+    font-family: inherit;
+    font-size: 13px;
+    direction: rtl;
+    box-sizing: border-box;
+}
+
+/* Select field */
+.select2 + .select2-container
+.select2-selection--single {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #d7dee8;
+    border-radius: 5px;
+    transition: border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+/* Selected text */
+.select2 + .select2-container
+.select2-selection--single .select2-selection__rendered {
+    width: 100%;
+    padding: 0 10px 0 28px;
+    color: #344054;
+    line-height: 32px;
+    text-align: right;
+}
+
+/* Placeholder */
+.select2 + .select2-container
+.select2-selection__placeholder {
+    color: #98a2b3;
+}
+
+/* Arrow */
+.select2 + .select2-container
+.select2-selection--single .select2-selection__arrow {
+    left: 7px;
+    right: auto;
+    top: 0;
+    width: 20px;
+    height: 32px;
+}
+
+/* Hover */
+.select2 + .select2-container
+.select2-selection--single:hover {
+    border-color: #b8c4d4;
+}
+
+/* Focus */
+.select2 + .select2-container--focus
+.select2-selection--single,
+.select2 + .select2-container--open
+.select2-selection--single {
+    border-color: #467fcf;
+    box-shadow: 0 0 0 2px rgba(70, 127, 207, .10);
+    outline: none;
+}
+
+/* Dropdown */
+.select2 + .select2-container .select2-dropdown {
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #d7dee8;
+    border-radius: 6px;
+    box-shadow: 0 8px 22px rgba(16, 24, 40, .09);
+}
+
+/* Search wrapper */
+.select2 + .select2-container
+.select2-search--dropdown {
+    padding: 8px;
+}
+
+/* Search input */
+.select2 + .select2-container
+.select2-search--dropdown .select2-search__field {
+    width: 100%;
+    padding: 7px 9px;
+    font-family: inherit;
+    font-size: 13px;
+    color: #344054;
+    direction: rtl;
+    border: 1px solid #d7dee8;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.select2 + .select2-container
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: #467fcf;
+}
+
+/* Options */
+.select2 + .select2-container
+.select2-results__option {
+    padding: 8px 11px;
+    color: #344054;
+    font-size: 13px;
+    text-align: right;
+    direction: rtl;
+    transition: background-color .12s ease;
+}
+
+/* Hovered option */
+.select2 + .select2-container
+.select2-results__option--highlighted.select2-results__option--selectable {
+    color: #24599a;
+    background: #edf4fc;
+}
+
+/* Selected option */
+.select2 + .select2-container
+.select2-results__option--selected {
+    color: #206bc4;
+    background: #f3f7fc;
+    font-weight: 500;
+}
+
+/* Multiple select */
+.select2 + .select2-container
+.select2-selection--multiple {
+    min-height: 34px;
+    padding: 2px 5px;
+    background: #fff;
+    border: 1px solid #d7dee8;
+    border-radius: 5px;
+    direction: rtl;
+}
+
+.select2 + .select2-container
+.select2-selection--multiple .select2-selection__rendered {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    padding: 0;
+}
+
+.select2 + .select2-container
+.select2-selection--multiple .select2-selection__choice {
+    margin: 2px 0;
+    padding: 2px 6px;
+    color: #285b96;
+    background: #edf4fc;
+    border: 1px solid #d6e5f7;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.select2 + .select2-container
+.select2-selection--multiple .select2-selection__choice__remove {
+    margin-left: 5px;
+    margin-right: 0;
+    color: #467fcf;
+    border: none;
+}
+
+.select2 + .select2-container
+.select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #d63939;
+    background: transparent;
+}
+
+/* Multiple select focus */
+.select2 + .select2-container--focus
+.select2-selection--multiple,
+.select2 + .select2-container--open
+.select2-selection--multiple {
+    border-color: #467fcf;
+    box-shadow: 0 0 0 2px rgba(70, 127, 207, .10);
+}
+
+/* Disabled */
+.select2:disabled + .select2-container
+.select2-selection--single,
+.select2:disabled + .select2-container
+.select2-selection--multiple {
+    background: #f2f4f7;
+    cursor: not-allowed;
+    opacity: .7;
+}
+
+/* No results */
+.select2 + .select2-container
+.select2-results__message {
+    padding: 12px;
+    color: #667085;
+    text-align: center;
+}
+
+
+/* Select2 - Corporate Arrow */
+
+.select2 + .select2-container
+.select2-selection--single .select2-selection__arrow {
+    position: absolute;
+    left: 9px;
+    right: auto;
+    top: 0;
+    width: 18px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hide default arrow */
+.select2 + .select2-container
+.select2-selection--single .select2-selection__arrow b {
+    display: none;
+}
+
+/* Custom arrow */
+.select2 + .select2-container
+.select2-selection--single .select2-selection__arrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid #7b8798;
+    border-bottom: 1.5px solid #7b8798;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+/* Open state */
+.select2 + .select2-container--open
+.select2-selection--single .select2-selection__arrow::before {
+    transform: translateY(2px) rotate(225deg);
+    border-color: #467fcf;
+}
+
+/* Hover state */
+.select2 + .select2-container
+.select2-selection--single:hover .select2-selection__arrow::before {
+    border-color: #467fcf;
+}

@@ -37,7 +37,7 @@
 
 {*    template styles*}
     <link rel="stylesheet" href="/view/templates/templatesStyle.css">
-
+    
     <script src="/public/vendors/js/vendors.min.js"></script>
     <script src="/public/vendors/libs/leaflet/leaflet.js"></script>
     <script src="/public/js/library/moment.min.js"></script>

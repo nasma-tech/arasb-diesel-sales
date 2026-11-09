@@ -5,7 +5,9 @@ namespace App\Controllers\scheme;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 use JetBrains\PhpStorm\NoReturn;
+use Packages\View\handleHttpErrorView;
 
 class ControllerScheme
 {
@@ -23,38 +25,6 @@ class ControllerScheme
         $this->Model();
     }
 
-    /**
-     * داینامیک پیدا کردن مدل متناظر با کنترلر
-     */
-//    protected function Model()
-//    {
-//        $controllerClass = get_class($this); // App\Controllers\Countries\Countries
-//        $parts = explode('\\', $controllerClass);
-//        $controllerName = array_pop($parts); // Countries
-//
-//        $modelName = str_replace('Controller', '', $controllerName) . 'Model';
-//
-//        foreach ($parts as &$part) {
-//            if (strtolower($part) === 'controllers') {
-//                $part = 'Models';
-//                break;
-//            }
-//        }
-//
-//        array_pop($parts);
-//        $parts[] = $modelName;
-//
-//        $modelClass = '\\' . implode('\\', $parts) . '\\' . $modelName;
-//
-//        if (!class_exists($modelClass)) {
-//            throw new Exception("❌ Model class {$modelClass} not found");
-//        }
-//
-//        $this->modelClass = $modelClass;
-//        $this->modelInstance = new $modelClass();
-//        $this->setModel($this->modelInstance->getTable());
-//    }
-
     protected function Model()
     {
         $controllerClass = get_class($this);
@@ -63,8 +33,6 @@ class ControllerScheme
         // مدل پیش‌بینی شده convention
         $predictedModel = '\\App\\Models\\' . $controllerName . 'Model';
 
-//        var_print($predictedModel);
-//        die();
 
         // مدل fallback: اگر override شده باشد
         $fallbackModel = property_exists($this, 'defaultModel') ? $this->defaultModel : null;
@@ -270,13 +238,58 @@ class ControllerScheme
     /**
      * متدهای کمکی
      */
-    public function requestArray(): array
-    {
-        return match ($_SERVER['REQUEST_METHOD']) {
+
+    public function  requestArray(?string $key = null,mixed $default = null,?callable $callback = null
+    ): mixed {
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $request = match ($method) {
+            'GET'  => $_GET,
             'POST' => $_POST,
-            'GET' => $_GET,
+            'PUT', 'PATCH', 'DELETE' => $this->getRequestBody(),
             default => [],
         };
+        if ($key === null) {
+            return $callback !== null ? $callback($request): $request;
+        }
+        $value = $request[$key] ?? $default;
+        if ($value === null || (is_string($value) && trim($value) === '')) {
+            $value = $default;
+        }
+        if ($callback !== null) {
+            $value = $callback($value);
+        }
+        return $value;
+    }
+
+    private function getRequestBody(): array
+    {
+        $contentType = strtolower(
+            trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0])
+        );
+
+        $body = file_get_contents('php://input');
+        if ($body === false || trim($body) === '') {
+            return [];
+        }
+        if ($contentType === 'application/json') {
+
+            $data = json_decode($body, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+                throw new InvalidArgumentException(
+                    'بدنه درخواست JSON معتبر نیست.'
+                );
+            }
+
+            return $data;
+        }
+
+        // فرم‌های معمولی برای PUT، PATCH و DELETE
+
+        $data = [];
+        parse_str($body, $data);
+
+        return $data;
     }
 
     public function changeRequestValues($key, $value): void
@@ -333,14 +346,11 @@ class ControllerScheme
         if (!$hayStack) {
             $hayStack = array_keys($this->requestArray());
         }
-//        $needle = array_merge($this->modelInstance->getFillable(), $needle);
 
         $needle = array_values(array_unique(
             array_merge($model->getFillable(), $needle)
         ));
-//        var_print($hayStack);
-//        var_print($needle);
-//        die();
+
 
         foreach ($needle as $item) {
             if (!in_array($item, $hayStack) && !in_array($item, $staticColumns)) {
@@ -403,5 +413,16 @@ class ControllerScheme
         }
 
         echo json_encode($output, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function checkRequired(array $required, array $request): void
+    {
+        $diff = array_diff(array_keys($required), array_keys($request));
+        $errors = array_filter($required, function ($label, $key) use ($diff, $request) {
+            return in_array($key, $diff, true) || !isset($request[$key]) || trim((string)$request[$key]) === '';
+        }, ARRAY_FILTER_USE_BOTH);
+        if (!empty($errors)) {
+            handleHttpErrorView::handle(422, array_values($errors));
+        }
     }
 }
