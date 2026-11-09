@@ -39,7 +39,11 @@ $router->get('/', function () {
     header('location: /dashboard/main');
 });
 $router->set404(function () {
-    handleHttpErrorView::handle(404);
+    if (isAjaxRequest()) {
+        http_response_code(404);
+    } else {
+        handleHttpErrorView::handle(404);
+    }
 });
 $router->get('/login', function () {
     $main = new login();
@@ -95,11 +99,6 @@ $router->mount('/countries', function () use ($router) {
 });
 $router->mount('/states', function () use ($router) {
     dynamicRoute($router, states::class, [
-        [
-            'method' => 'GET',
-            'path' => '/getFilterStates',
-            'action' => 'getFilterStates'
-        ],
         [
             'method' => 'GET',
             'path' => '/getMapInfo',
@@ -178,6 +177,8 @@ $router->mount('/CustomerContactInformation', function () use ($router) {
     ]);
 });
 
+$router->mount('/UserContactTypes', function () use ($router) {
+    dynamicRoute($router, App\Controllers\UserContactTypes\UserContactTypes::class);
 $router->mount('/ContactsGroup', function () use ($router) {
     dynamicRoute($router, App\Controllers\ContactsGroup\ContactsGroup::class, [
         [
