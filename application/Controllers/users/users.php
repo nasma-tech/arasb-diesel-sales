@@ -145,4 +145,14 @@ class users extends ControllerScheme
         }, $get->toArray());
     }
 
+    public function getUserOptions()
+    {
+        $output = ['<option value="" selected disabled>لطفا یک مورد را انتخاب کنید</option>'];
+        foreach (UserModel::all() as $user) {
+            if ($user->id != self::userObject()->userId) {
+                $output[] = '<option value="'. $user->id .'">'.$user->full_name.'</option>';
+            }
+        }
+        echo implode($output);
+    }
 }

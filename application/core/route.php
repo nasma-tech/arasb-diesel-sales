@@ -75,6 +75,11 @@ $router->mount('/users', function () use ($router) {
             'method' => 'GET',
             'path' => '/getUsersForm',
             'action' => 'getUsersForm'
+        ],
+        [
+            'method' => 'GET',
+            'path' => '/getUserOptions',
+            'action' => 'getUserOptions'
         ]
     ]);
 });
@@ -280,4 +285,25 @@ $router->mount('/SocialNetworksList', function () use ($router) {
             'action' => 'getSocialNetworkList'
         ]
     ]);
+});
+$router->mount('/PurchaseReluctanceFollowup', function () use ($router) {
+    dynamicRoute($router, App\Controllers\PurchaseReluctanceFollowup\PurchaseReluctanceFollowup::class, [
+        [
+            'method' => 'POST',
+            'path' => "/referralFollowUp",
+            'action' => 'referralFollowUp'
+        ]
+    ]);
+});
+
+$router->mount('/CustomersRequest', function () use ($router) {
+    dynamicRoute($router, App\Controllers\CustomersRequest\CustomersRequest::class);
+});
+
+$router->mount('/Fishbone', function () use ($router) {
+    dynamicRoute($router, App\Controllers\Fishbone\Fishbone::class);
+});
+
+$router->mount('/ContactChannel', function () use ($router) {
+    dynamicRoute($router, App\Controllers\ContactChannel\ContactChannel::class);
 });

@@ -5,6 +5,7 @@ namespace App\Models\CustomerContactInformationModel;
 use App\Models\CityModel\CityModel;
 use App\Models\CompaniesModel\CompaniesModel;
 use App\Models\ContactAcquisitionSourcesModel\ContactAcquisitionSourcesModel;
+use App\Models\ContactPhonesModel\ContactPhonesModel;
 use App\Models\ContactProjectsModel\ContactProjectsModel;
 use App\Models\ContactsGroupModel\ContactsGroupModel;
 use App\Models\StateModel\StateModel;
@@ -71,5 +72,8 @@ class CustomerContactInformationModel extends Model
         return $this->hasOne(ContactAcquisitionSourcesModel::class, 'id', 'contact_acquisition_source_id');
     }
 
-
+    public function ContactNumbers() : HasMany
+    {
+        return $this->hasMany(ContactPhonesModel::class,'contact_id','id');
+    }
 }

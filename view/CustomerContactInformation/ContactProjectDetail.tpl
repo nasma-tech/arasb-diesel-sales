@@ -55,6 +55,7 @@
                                     </thead>
                                     <tbody>
                                     {foreach $getData.followUpData|default:[] as $item}
+                                        {if $item.FollowUp_action_id != 12}
                                         <tr>
                                             <td class="border">{$item.followUpActionTitleData.title}</td>
                                             <td class="border">{jdate("Y/m/d",strtotime($item.created_at))}</td>
@@ -123,6 +124,7 @@
                                                 {/if}
                                             </td>
                                         </tr>
+                                        {/if}
                                     {/foreach}
                                     </tbody>
                                 </table>
